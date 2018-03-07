@@ -1,0 +1,2 @@
+# mNews
+init origin file
