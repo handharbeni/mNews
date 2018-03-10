@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DatabaseModule</string>
+    <string name="module_server">http://192.168.3.7/bangjekApi/</string>
+
+</resources>
