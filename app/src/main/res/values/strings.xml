@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">mNews</string>
+
+    <string name="permission_internet">Memperbolehkan internet.</string>
+    <string name="permission_storage">Memperbolehkan menyimpan cache.</string>
+    <string name="permission_location">Memperbolehkan mencari lokasi.</string>
+    <string name="permission_network">Memperbolehkan meliahat keadaan koneksi jaringan.</string>
+    <string name="permission_call">Memperbolehkan menelfon.</string>
+    <string name="permission_phoneinfo">Memperbolehkan mengetahui smartphone apa yang Anda gunakan.</string>
+
+    <string name="value_enable">Sudah</string>
+    <string name="value_disable">Belum</string>
+    <string name="penjelasan_permission">Silahkan klik ijin yang belum di konfirmasi pada tombol "Belum" (Tulisan berwarna merah) agar kami bisa mempermudah Anda menjalankan aplikasi.</string>
 </resources>
