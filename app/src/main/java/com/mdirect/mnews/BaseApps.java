@@ -3,6 +3,8 @@ package com.mdirect.mnews;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 
+import com.mdirect.mnews.value.Constants;
+
 /**
  * Created by Beni on 07/03/2018.
  */
@@ -20,13 +22,11 @@ public class BaseApps extends AppCompatActivity{
     public static String KEY_CLIENT_ID = "clientid";
     public static String KEY_CLIENT_SECRET = "clientsecret";
 
-    public String APP_ID = "";
-    public String APP_SECRET = "";
-
-    public String CLIENT_TOKEN = "";
-
-    public String CLIENT_ID = "";
-    public String CLIENT_SECRET = "";
-
+    public String MDIRECT_LOGIN_URL = Constants.MDIRECT_LOGIN_URL;
+    public String MDIRECT_URL = Constants.MDIRECT_URL;
+    public String MNEWS_URL = Constants.MNEWS_URL;
+    public String APP_ID = Constants.APP_ID;
+    public String APP_SECRET = Constants.APP_SECRET;
+    public String REDIRECT_URI = Constants.REDIRECT_URI;
 
 }
