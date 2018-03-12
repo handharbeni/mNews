@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">DatabaseModule</string>
-    <string name="module_server">http://192.168.3.7/bangjekApi/</string>
+    <string name="module_server_login">http://authdev.mdirect.id/client_login</string>
+    <string name="module_server_account">http://authdev.mdirect.id/api/v1/</string>
+    <string name="module_server_mnews">http://newsdev.mdirect.id/api/v1/</string>
 
 </resources>
