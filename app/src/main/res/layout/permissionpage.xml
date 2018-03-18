@@ -22,7 +22,7 @@
             <ImageView
                 android:layout_width="52dp"
                 android:layout_height="52dp"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@drawable/m_news_logo"
                 android:layout_gravity="center"
                 android:padding="8dp"/>
 
@@ -40,7 +40,7 @@
             android:id="@+id/help"
             android:layout_width="52dp"
             android:layout_height="match_parent"
-            android:src="@drawable/help"
+            app:srcCompat="@drawable/ic_send"
             android:padding="16dp"
             android:layout_gravity="end"/>
 

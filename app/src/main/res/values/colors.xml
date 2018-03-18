@@ -1,13 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f69101</color>
+    <color name="colorPrimary">#33BFBA</color>
     <color name="colorPrimary2">#000000</color>
-    <color name="colorPrimaryDark">#f6821f</color>
-    <color name="colorAccent">#919292</color>
+    <color name="colorPrimaryDark">#30afab</color>
+    <color name="colorAccent">#C3C3C3</color>
 
     <color name="colorBackground">#ffffff</color>
     <color name="colorEnable">#2ecc71</color>
     <color name="colorDisable">#e74c3c</color>
     <color name="colorButtonText">#919292</color>
     <color name="colorLoadPage">#90000000</color>
+
+    <color name="search_box">#BABABA</color>
+    <color name="search_box_background">#F1F1F1</color>
+
+    <color name="humberger_menu">#000000</color>
+
+    <color name="tagline_active">#33BFBA</color>
+    <color name="tagline_border">#33BFBA</color>
+    <color name="tagline_normal">#C3C3C3</color>
+
+    <color name="article_text">#000000</color>
+    <color name="article_caption">#000000</color>
+    <color name="article_normal">#000000</color>
+
+    <color name="button_text_color">#FFFFFF</color>
+    <color name="button_background_color">#33BFBA</color>
+    
+    <color name="related_article_title">#000000</color>
+    <color name="related_article_separator">#DDDDDD</color>
+    <color name="related_article_title_article">#222222</color>
+    <color name="related_article_release_date">#646464</color>
+    
+    <color name="headline_title">#EDEDED</color>
+    <color name="headline_caption">#FFFFFF</color>
+    
+    <color name="comment_headline_title">#000000</color>
+    <color name="comment_headline_date">#646464</color>
+    
+    <color name="comment_detail_username">#000000</color>
+    <color name="comment_detail_date">#000000</color>
+    <color name="comment_detail_deskripsi">#000000</color>
+
+    <color name="comment_field_text">#D5D5D5</color>
+    <color name="comment_field_background">#000000</color>
+
+    <color name="search_result_caption">#000000</color>
+
+    <color name="user_profile_text">#000000</color>
+    <color name="user_profile_deskripsi">#000000</color>
+    <color name="user_profile_link">#000000</color>
+
+    <color name="form_field_color">#090909</color>
+    <color name="form_border_color">#E9E9E9</color>
+    <color name="form_error_label">#E30000</color>
+    <color name="form_error_border">#FF0000</color>
+    <color name="form_error_field">#FFEFEF</color>
 </resources>
