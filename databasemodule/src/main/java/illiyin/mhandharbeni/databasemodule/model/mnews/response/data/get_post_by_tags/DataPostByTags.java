@@ -3,6 +3,10 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_post_b
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general.Author;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general.Properties;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 
@@ -66,7 +70,7 @@ public class DataPostByTags extends RealmObject {
     @SerializedName("properties")
     @Expose
     @Ignore
-    private Properties properties;
+    private List<Properties> properties;
     @SerializedName("date_published")
     @Expose
     private String datePublished;
@@ -85,7 +89,7 @@ public class DataPostByTags extends RealmObject {
     @SerializedName("author")
     @Expose
     @Ignore
-    private Author author;
+    private List<Author> author;
 
     public DataPostByTags() {
     }
@@ -226,11 +230,11 @@ public class DataPostByTags extends RealmObject {
         this.view = view;
     }
 
-    public Properties getProperties() {
+    public List<Properties> getProperties() {
         return properties;
     }
 
-    public void setProperties(Properties properties) {
+    public void setProperties(List<Properties> properties) {
         this.properties = properties;
     }
 
@@ -274,11 +278,11 @@ public class DataPostByTags extends RealmObject {
         this.kategoriSlug = kategoriSlug;
     }
 
-    public Author getAuthor() {
+    public List<Author> getAuthor() {
         return author;
     }
 
-    public void setAuthor(Author author) {
+    public void setAuthor(List<Author> author) {
         this.author = author;
     }
 }

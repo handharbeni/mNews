@@ -19,7 +19,7 @@ public class ResponseGetAllPost {
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("data")
+    @SerializedName("posts")
     @Expose
     @Ignore
     private List<DataGetAllPost> data = null;

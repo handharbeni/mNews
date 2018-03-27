@@ -3,6 +3,8 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_all_po
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general.Author;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general.Properties;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 
@@ -65,6 +67,7 @@ public class DataGetAllPost extends RealmObject {
     private Integer view;
     @SerializedName("properties")
     @Expose
+    @Ignore
     private Properties properties;
     @SerializedName("date_published")
     @Expose

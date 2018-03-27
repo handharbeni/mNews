@@ -68,14 +68,15 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
         setContentView(R.layout.layout_main);
         ButterKnife.bind(this);
 
-        initViewSearch();
-        initViewStub();
-        initSearch();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        initViewSearch();
+        initViewStub();
+        initSearch();
+        hiddenSearch();
     }
 
 

@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_post_by_tags.Meta;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_post_kategori.DataPostKategori;
-import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_post_kategori.Meta;
 import io.realm.annotations.Ignore;
 
 /**

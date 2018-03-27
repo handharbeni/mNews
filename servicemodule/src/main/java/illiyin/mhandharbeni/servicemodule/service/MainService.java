@@ -42,6 +42,7 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         syncMenus();
+        syncFeaturedPost();
     }
 
     @Override
@@ -82,6 +83,16 @@ public class MainService extends Service {
         };
         Scheduler.Worker worker = Schedulers.newThread().createWorker();
         worker.schedulePeriodically(action0, DELAY_CALL, PERIODICALLY_CALL_TEN_SECONDS, TimeUnit.MILLISECONDS);
+    }
+    public void syncFeaturedPost(){
+        Action0 action0 = new Action0() {
+            @Override
+            public void call() {
+                adapterRequest.syncFeatured();
+            }
+        };
+        Scheduler.Worker worker = Schedulers.newThread().createWorker();
+        worker.schedulePeriodically(action0, DELAY_CALL, PERIODICALLY_CALL_TWENTY_SECONDS, TimeUnit.MILLISECONDS);
     }
 
     @Override

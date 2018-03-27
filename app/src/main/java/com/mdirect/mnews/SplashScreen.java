@@ -8,6 +8,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import illiyin.mhandharbeni.databasemodule.model.mnews.AdapterRequest;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_all_post.DataGetAllPost;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.DataMenus;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import io.realm.RealmResults;
@@ -59,16 +60,40 @@ public class SplashScreen extends BaseApps{
             boolean returns = adapterRequest.syncMenus(true);
             if (returns){
                 /*pindah ke mainactivity*/
-                Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
-                finish();
+                initFeatured();
             }
         }else{
-            Intent i = new Intent(SplashScreen.this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            finish();
+            initFeatured();
         }
+    }
+
+    public void initFeatured(){
+        idLoading.setText("Loading Featured");
+        Boolean isTrue = adapterRequest.syncFeatured(true);
+        if (isTrue){
+            initNews();
+        }
+    }
+
+    public void initNews(){
+        idLoading.setText("Loading News");
+        DataGetAllPost dataGetAllPost = new DataGetAllPost();
+        Crud crudNews = new Crud(getApplicationContext(), dataGetAllPost);
+        RealmResults results = crudNews.read();
+        if (results.size() < 1){
+            Boolean isTrue = adapterRequest.syncPost("1", true);
+            if (isTrue){
+                gotoMain();
+            }
+        }else{
+            gotoMain();
+        }
+    }
+
+    private void gotoMain(){
+        Intent i = new Intent(SplashScreen.this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+        finish();
     }
 }

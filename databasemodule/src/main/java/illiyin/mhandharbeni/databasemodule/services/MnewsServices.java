@@ -30,7 +30,6 @@ public interface MnewsServices {
             "Content-Type: application/json",
             "mnewstoken: "+mnewstoken
     })
-    @FormUrlEncoded
     @GET("posts")
     Call<ResponseGetAllPost> getAllPost(@Query("page") String page);
 
@@ -86,9 +85,8 @@ public interface MnewsServices {
             "Content-Type: application/json",
             "mnewstoken: "+mnewstoken
     })
-    @FormUrlEncoded
     @GET("featured/post")
-    Call<ResponseFeaturedPost> getFeaturedPosts();
+    Observable<ResponseFeaturedPost> getFeaturedPosts();
 
     @Headers({
             "Content-Type: application/json",

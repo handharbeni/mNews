@@ -3,6 +3,8 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_featured_post.DataFeaturedPost;
 import io.realm.annotations.Ignore;
 
@@ -18,10 +20,11 @@ public class ResponseFeaturedPost {
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("data")
+
+    @SerializedName(value="data")
     @Expose
     @Ignore
-    private DataFeaturedPost data;
+    private Object data = null;
 
     public Boolean getSuccess() {
         return success;
@@ -39,11 +42,11 @@ public class ResponseFeaturedPost {
         this.message = message;
     }
 
-    public DataFeaturedPost getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(DataFeaturedPost data) {
+    public void setData(Object data) {
         this.data = data;
     }
 

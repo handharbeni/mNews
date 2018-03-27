@@ -3,6 +3,9 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_commen
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general.Author;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 
@@ -26,7 +29,7 @@ public class Comment extends RealmObject {
     @SerializedName("author")
     @Expose
     @Ignore
-    private Author author;
+    private List<Author> author;
 
     public Comment() {
     }
@@ -63,11 +66,11 @@ public class Comment extends RealmObject {
         this.createdAt = createdAt;
     }
 
-    public Author getAuthor() {
+    public List<Author> getAuthor() {
         return author;
     }
 
-    public void setAuthor(Author author) {
+    public void setAuthor(List<Author> author) {
         this.author = author;
     }
 }

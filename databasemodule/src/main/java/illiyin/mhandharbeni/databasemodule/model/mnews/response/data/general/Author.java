@@ -1,4 +1,4 @@
-package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_single_post;
+package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,8 +9,7 @@ import io.realm.RealmObject;
  * Created by Beni on 12/03/2018.
  */
 
-public class Author{
-
+public class Author extends RealmObject {
     @SerializedName("id")
     @Expose
     private Integer id;
