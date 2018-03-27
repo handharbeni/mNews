@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_tags.DataGetTags;
+import io.realm.annotations.Ignore;
 
 /**
  * Created by Beni on 12/03/2018.
@@ -15,6 +16,7 @@ public class ResponseGetTags {
 
     @SerializedName("data")
     @Expose
+    @Ignore
     private List<DataGetTags> data = null;
     @SerializedName("total")
     @Expose

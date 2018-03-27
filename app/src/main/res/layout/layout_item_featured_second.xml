@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
+            android:layout_margin="@dimen/sepuluh_dp">
+            <ImageView
+                android:id="@+id/imageSecond"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/group_2"
+                android:layout_width="match_parent"
+                android:layout_height="130dp" />
+        </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_margin="@dimen/sepuluh_dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:id="@+id/txtTitleSeconds"
+                android:text="Title Article"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textColor="@color/comment_headline_date"
+                android:textSize="11sp"
+                android:id="@+id/txtTglSeconds"
+                android:text="Tanggal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

@@ -3,11 +3,14 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_single
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class Single {
+public class Single extends RealmObject {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -31,13 +34,13 @@ public class Single {
     private String video;
     @SerializedName("gallery_id")
     @Expose
-    private Object galleryId;
+    private String galleryId;
     @SerializedName("kategori")
     @Expose
     private String kategori;
     @SerializedName("tag")
     @Expose
-    private Object tag;
+    private String tag;
     @SerializedName("featured_img")
     @Expose
     private String featuredImg;
@@ -46,7 +49,7 @@ public class Single {
     private String thumbOnly;
     @SerializedName("fimg_caption")
     @Expose
-    private Object fimgCaption;
+    private String fimgCaption;
     @SerializedName("featured_post")
     @Expose
     private String featuredPost;
@@ -61,6 +64,7 @@ public class Single {
     private Integer view;
     @SerializedName("properties")
     @Expose
+    @Ignore
     private Properties properties;
     @SerializedName("date_published")
     @Expose
@@ -70,10 +74,14 @@ public class Single {
     private String createdAt;
     @SerializedName("updated_at")
     @Expose
-    private Object updatedAt;
+    private String updatedAt;
     @SerializedName("author")
     @Expose
+    @Ignore
     private Author author;
+
+    public Single() {
+    }
 
     public Integer getId() {
         return id;
@@ -131,11 +139,11 @@ public class Single {
         this.video = video;
     }
 
-    public Object getGalleryId() {
+    public String getGalleryId() {
         return galleryId;
     }
 
-    public void setGalleryId(Object galleryId) {
+    public void setGalleryId(String galleryId) {
         this.galleryId = galleryId;
     }
 
@@ -147,11 +155,11 @@ public class Single {
         this.kategori = kategori;
     }
 
-    public Object getTag() {
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(Object tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
@@ -171,11 +179,11 @@ public class Single {
         this.thumbOnly = thumbOnly;
     }
 
-    public Object getFimgCaption() {
+    public String getFimgCaption() {
         return fimgCaption;
     }
 
-    public void setFimgCaption(Object fimgCaption) {
+    public void setFimgCaption(String fimgCaption) {
         this.fimgCaption = fimgCaption;
     }
 
@@ -235,11 +243,11 @@ public class Single {
         this.createdAt = createdAt;
     }
 
-    public Object getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Object updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 

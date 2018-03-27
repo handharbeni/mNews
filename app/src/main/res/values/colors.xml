@@ -12,6 +12,7 @@
     <color name="colorLoadPage">#90000000</color>
 
     <color name="search_box">#BABABA</color>
+    <color name="search_box_hint">#d6d6d6</color>
     <color name="search_box_background">#F1F1F1</color>
 
     <color name="humberger_menu">#000000</color>
@@ -56,4 +57,6 @@
     <color name="form_error_label">#E30000</color>
     <color name="form_error_border">#FF0000</color>
     <color name="form_error_field">#FFEFEF</color>
+
+    <color name="color_load">#404040</color>
 </resources>

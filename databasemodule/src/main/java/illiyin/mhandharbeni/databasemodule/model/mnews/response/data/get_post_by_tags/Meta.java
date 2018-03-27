@@ -3,11 +3,13 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_post_b
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class Meta {
+public class Meta extends RealmObject {
     @SerializedName("total")
     @Expose
     private Integer total;
@@ -29,6 +31,9 @@ public class Meta {
     @SerializedName("execution_time")
     @Expose
     private Double executionTime;
+
+    public Meta() {
+    }
 
     public Integer getTotal() {
         return total;

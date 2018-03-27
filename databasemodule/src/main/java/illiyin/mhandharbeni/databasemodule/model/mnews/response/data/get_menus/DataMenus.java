@@ -5,11 +5,15 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class DataMenus {
+public class DataMenus extends RealmObject {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -21,7 +25,11 @@ public class DataMenus {
     private String slug;
     @SerializedName("children")
     @Expose
-    private List<Child> children = null;
+    @Ignore
+    private RealmList<Child> children = null;
+
+    public DataMenus() {
+    }
 
     public Integer getId() {
         return id;
@@ -47,11 +55,11 @@ public class DataMenus {
         this.slug = slug;
     }
 
-    public List<Child> getChildren() {
+    public RealmList<Child> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Child> children) {
+    public void setChildren(RealmList<Child> children) {
         this.children = children;
     }
 }

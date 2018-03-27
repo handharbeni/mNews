@@ -7,6 +7,7 @@ import java.util.List;
 
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_post_by_tags.DataPostByTags;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_post_by_tags.Meta;
+import io.realm.annotations.Ignore;
 
 /**
  * Created by Beni on 12/03/2018.
@@ -16,6 +17,7 @@ public class ResponseGetPostByTags {
 
     @SerializedName("data")
     @Expose
+    @Ignore
     private List<DataPostByTags> data = null;
     @SerializedName("meta")
     @Expose

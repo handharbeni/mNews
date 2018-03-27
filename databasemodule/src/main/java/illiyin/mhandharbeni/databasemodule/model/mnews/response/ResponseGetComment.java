@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_comment.DataGetComment;
+import io.realm.annotations.Ignore;
 
 /**
  * Created by Beni on 12/03/2018.
@@ -18,6 +19,7 @@ public class ResponseGetComment {
     private String message;
     @SerializedName("data")
     @Expose
+    @Ignore
     private DataGetComment data;
 
     public Boolean getSuccess() {

@@ -5,11 +5,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class DataGetComment {
+public class DataGetComment extends RealmObject {
     @SerializedName("page")
     @Expose
     private String page;
@@ -21,7 +24,11 @@ public class DataGetComment {
     private Integer total;
     @SerializedName("comments")
     @Expose
+    @Ignore
     private List<Comment> comments = null;
+
+    public DataGetComment() {
+    }
 
     public String getPage() {
         return page;

@@ -3,11 +3,13 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_commen
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class UserRole {
+public class UserRole extends RealmObject {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -26,6 +28,9 @@ public class UserRole {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+
+    public UserRole() {
+    }
 
     public Integer getId() {
         return id;

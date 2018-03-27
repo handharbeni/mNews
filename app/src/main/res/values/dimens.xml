@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="lima_dp">5dp</dimen>
+    <dimen name="sepuluh_dp">10dp</dimen>
+    <dimen name="limabelas_dp">15dp</dimen>
+    <dimen name="duapuluh_dp">20dp</dimen>
+    <dimen name="dualima_dp">25dp</dimen>
+    <dimen name="tigapuluh_dp">30dp</dimen>
+
+    <dimen name="rounded_value">5dp</dimen>
+</resources>

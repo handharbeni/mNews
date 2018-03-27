@@ -83,6 +83,9 @@ public class Author {
     @Expose
     private String photo;
 
+    public Author() {
+    }
+
     public Integer getId() {
         return id;
     }

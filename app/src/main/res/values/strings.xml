@@ -11,4 +11,5 @@
     <string name="value_enable">Sudah</string>
     <string name="value_disable">Belum</string>
     <string name="penjelasan_permission">Silahkan klik ijin yang belum di konfirmasi pada tombol "Belum" (Tulisan berwarna merah) agar kami bisa mempermudah Anda menjalankan aplikasi.</string>
+    <string name="placeholder_hintsearch">SEARCH</string>
 </resources>

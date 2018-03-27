@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_featured_post.DataFeaturedPost;
+import io.realm.annotations.Ignore;
 
 /**
  * Created by Beni on 12/03/2018.
@@ -19,6 +20,7 @@ public class ResponseFeaturedPost {
     private String message;
     @SerializedName("data")
     @Expose
+    @Ignore
     private DataFeaturedPost data;
 
     public Boolean getSuccess() {

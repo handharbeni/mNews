@@ -9,6 +9,13 @@ import android.os.IBinder;
 
 import com.google.firebase.crash.FirebaseCrash;
 
+import java.util.concurrent.TimeUnit;
+
+import illiyin.mhandharbeni.databasemodule.model.mnews.AdapterRequest;
+import rx.Scheduler;
+import rx.functions.Action0;
+import rx.schedulers.Schedulers;
+
 
 /**
  * Created by root on 17/07/17.
@@ -20,15 +27,21 @@ public class MainService extends Service {
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 5f;
 
-    private static int PERIODICALLY_CALL = 2 * 1000;
+    private static int PERIODICALLY_CALL_TWO_SECONDS = 2 * 1000;
+    private static int PERIODICALLY_CALL_FIVE_SECONDS = 5 * 1000;
+    private static int PERIODICALLY_CALL_TEN_SECONDS = 10 * 1000;
+    private static int PERIODICALLY_CALL_FIFTEEN_SECONDS = 15 * 1000;
+    private static int PERIODICALLY_CALL_TWENTY_SECONDS = 20 * 1000;
     private static int DELAY_CALL = 500;
+
+    private AdapterRequest adapterRequest;
 
 
     public static Boolean serviceRunning = false;
 
     @Override
     public void onCreate() {
-        syncChat();
+        syncMenus();
     }
 
     @Override
@@ -39,6 +52,7 @@ public class MainService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         serviceRunning = true;
+        adapterRequest = new AdapterRequest(getApplicationContext());
         return START_STICKY;
     }
 
@@ -59,18 +73,15 @@ public class MainService extends Service {
         }
         return false;
     }
-    public void syncChat(){
-//        Action0 action0 = new Action0() {
-//            @Override
-//            public void call() {
-//                if (!checkIsRunning(ChatService.class)){
-//                    Intent is = new Intent(getBaseContext(), ChatService.class);
-//                    startService(is);
-//                }
-//            }
-//        };
-//        Scheduler.Worker worker = Schedulers.newThread().createWorker();
-//        worker.schedulePeriodically(action0, DELAY_CALL, PERIODICALLY_CALL, TimeUnit.MILLISECONDS);
+    public void syncMenus(){
+        Action0 action0 = new Action0() {
+            @Override
+            public void call() {
+                adapterRequest.syncMenus();
+            }
+        };
+        Scheduler.Worker worker = Schedulers.newThread().createWorker();
+        worker.schedulePeriodically(action0, DELAY_CALL, PERIODICALLY_CALL_TEN_SECONDS, TimeUnit.MILLISECONDS);
     }
 
     @Override

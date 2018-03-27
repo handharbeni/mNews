@@ -7,6 +7,7 @@ import java.util.List;
 
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_search_post.DataSearchPost;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_search_post.Meta;
+import io.realm.annotations.Ignore;
 
 /**
  * Created by Beni on 12/03/2018.
@@ -15,9 +16,11 @@ import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_search_
 public class ResponseSearchPost {
     @SerializedName("data")
     @Expose
+    @Ignore
     private List<DataSearchPost> data = null;
     @SerializedName("meta")
     @Expose
+    @Ignore
     private Meta meta;
     @SerializedName("success")
     @Expose

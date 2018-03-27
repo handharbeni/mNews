@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+
 /**
  * Created by Beni on 12/03/2018.
  */
@@ -16,7 +19,11 @@ public class DataGetSinglePost {
     private Single single;
     @SerializedName("related")
     @Expose
+    @Ignore
     private List<Related> related = null;
+
+    public DataGetSinglePost() {
+    }
 
     public Single getSingle() {
         return single;

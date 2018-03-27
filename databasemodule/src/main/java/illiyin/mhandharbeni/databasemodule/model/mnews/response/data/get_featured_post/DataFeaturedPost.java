@@ -3,11 +3,14 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_featur
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class DataFeaturedPost {
+public class DataFeaturedPost extends RealmObject {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -61,6 +64,7 @@ public class DataFeaturedPost {
     private Integer view;
     @SerializedName("properties")
     @Expose
+    @Ignore
     private Properties properties;
     @SerializedName("date_published")
     @Expose
@@ -73,7 +77,12 @@ public class DataFeaturedPost {
     private String updatedAt;
     @SerializedName("author")
     @Expose
+    @Ignore
     private Author author;
+
+    public DataFeaturedPost() {
+
+    }
 
     public Integer getId() {
         return id;

@@ -3,11 +3,13 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_search
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class Author {
+public class Author{
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -20,6 +22,9 @@ public class Author {
     @SerializedName("photo")
     @Expose
     private String photo;
+
+    public Author() {
+    }
 
     public Integer getId() {
         return id;

@@ -3,11 +3,14 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_post_k
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class DataPostKategori {
+public class DataPostKategori extends RealmObject {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -61,6 +64,7 @@ public class DataPostKategori {
     private Integer view;
     @SerializedName("properties")
     @Expose
+    @Ignore
     private Properties properties;
     @SerializedName("date_published")
     @Expose
@@ -79,7 +83,11 @@ public class DataPostKategori {
     private String kategoriSlug;
     @SerializedName("author")
     @Expose
+    @Ignore
     private Author author;
+
+    public DataPostKategori() {
+    }
 
     public Integer getId() {
         return id;

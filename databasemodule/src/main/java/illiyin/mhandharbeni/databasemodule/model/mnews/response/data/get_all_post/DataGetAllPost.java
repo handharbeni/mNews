@@ -3,11 +3,14 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_all_po
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class DataGetAllPost {
+public class DataGetAllPost extends RealmObject {
 
     @SerializedName("id")
     @Expose
@@ -80,7 +83,11 @@ public class DataGetAllPost {
     private String kategoriSlug;
     @SerializedName("author")
     @Expose
+    @Ignore
     private Author author;
+
+    public DataGetAllPost() {
+    }
 
     public Integer getId() {
         return id;

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" android:padding="@dimen/sepuluh_dp">
+    <solid android:color="@color/search_box_background"/>
+    <corners
+        android:bottomRightRadius="@dimen/rounded_value"
+        android:bottomLeftRadius="@dimen/rounded_value"
+        android:topLeftRadius="@dimen/rounded_value"
+        android:topRightRadius="@dimen/rounded_value"/>
+</shape>

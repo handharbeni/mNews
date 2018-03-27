@@ -3,11 +3,13 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_katego
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Beni on 12/03/2018.
  */
 
-public class DataKategori {
+public class DataKategori extends RealmObject {
 
     @SerializedName("id")
     @Expose
@@ -36,6 +38,9 @@ public class DataKategori {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+
+    public DataKategori() {
+    }
 
     public Integer getId() {
         return id;

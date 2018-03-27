@@ -3,6 +3,8 @@ package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_single
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Beni on 12/03/2018.
  */
@@ -17,6 +19,9 @@ public class Properties {
     @SerializedName("meta_keyword")
     @Expose
     private String metaKeyword;
+
+    public Properties() {
+    }
 
     public String getMetaTitle() {
         return metaTitle;
