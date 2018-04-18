@@ -113,17 +113,21 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
     private void initChangeData(){}
 
     private void initViewStub(){
-        mainStub.setLayoutResource(R.layout.layout_tab_main);
-        vTab = mainStub.inflate();
+        if (mainStub.getParent() != null){
+            mainStub.setLayoutResource(R.layout.layout_tab_main);
+            vTab = mainStub.inflate();
+        }
         tabMainView = new TabMainView(this, vTab);
         tabMainView.initParameter();
         tabMainView.initData();
         tabMainView.setViewPager();
     }
     private void initViewSearch(){
-        searchStub.setLayoutResource(R.layout.layout_tab_main_search);
-        vSearch = searchStub.inflate();
-        tabMainSearch = new TabMainSearch(this, vSearch);
+        if (searchStub.getParent() != null){
+            searchStub.setLayoutResource(R.layout.layout_tab_main_search);
+            vSearch = searchStub.inflate();
+            tabMainSearch = new TabMainSearch(this, vSearch);
+        }
     }
     private void hiddenSearch(){
         mainStub.setVisibility(View.VISIBLE);

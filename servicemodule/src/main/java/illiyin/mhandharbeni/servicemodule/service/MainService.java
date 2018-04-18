@@ -88,7 +88,7 @@ public class MainService extends Service {
         Action0 action0 = new Action0() {
             @Override
             public void call() {
-                adapterRequest.syncFeatured();
+                adapterRequest.syncFeatureds();
             }
         };
         Scheduler.Worker worker = Schedulers.newThread().createWorker();

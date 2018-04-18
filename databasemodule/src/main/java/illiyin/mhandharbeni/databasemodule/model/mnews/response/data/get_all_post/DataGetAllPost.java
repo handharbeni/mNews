@@ -7,6 +7,7 @@ import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general.Aut
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general.Properties;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Beni on 12/03/2018.
@@ -17,6 +18,8 @@ public class DataGetAllPost extends RealmObject {
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    @PrimaryKey
     @SerializedName("slug_id")
     @Expose
     private String slugId;

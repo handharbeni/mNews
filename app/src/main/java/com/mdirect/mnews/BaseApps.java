@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.mdirect.mnews.value.Constants;
 
 import illiyin.mhandharbeni.servicemodule.ServiceAdapter;
@@ -48,6 +49,8 @@ public class BaseApps extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FirebaseCrash.log("Activity created");
+
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
 
@@ -79,5 +82,10 @@ public class BaseApps extends AppCompatActivity{
     public void showLog(String tag, String message){
         Log.d(tag, "showLog: "+message);
     }
-
+    public void writeLog(Throwable throwable){
+        FirebaseCrash.report(throwable);
+    }
+    public void writeLog(String message){
+        FirebaseCrash.log(message);
+    }
 }

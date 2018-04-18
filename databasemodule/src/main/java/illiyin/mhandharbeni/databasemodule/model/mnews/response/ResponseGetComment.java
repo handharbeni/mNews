@@ -19,7 +19,6 @@ public class ResponseGetComment {
     private String message;
     @SerializedName("data")
     @Expose
-    @Ignore
     private DataGetComment data;
 
     public Boolean getSuccess() {

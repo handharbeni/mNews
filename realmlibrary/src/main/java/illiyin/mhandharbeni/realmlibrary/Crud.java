@@ -6,6 +6,7 @@ import illiyin.mhandharbeni.crudrealmmodul.CRUDRealm;
 
 import io.realm.Case;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -18,13 +19,25 @@ public class Crud {
     Context context;
     CRUDRealm crudRealm;
     private RealmObject realmObject;
+    private RealmListener realmListener;
     public Crud(Context context, RealmObject realmObject) {
         this.context = context;
         this.realmObject = realmObject;
+        this.realmListener = null;
         if (crudRealm == null){
             crudRealm = new CRUDRealm(this.context, this.realmObject);
         }
     }
+    public Crud(Context context, RealmObject realmObject, RealmListener realmListener){
+        this.context = context;
+        this.realmObject = realmObject;
+        this.realmListener = realmListener;
+        if (crudRealm == null){
+            crudRealm = new CRUDRealm(this.context, this.realmObject);
+        }
+
+    }
+
 
     public RealmObject getRealmObject(){
         return this.realmObject;
@@ -131,5 +144,19 @@ public class Crud {
         } else {
             return false;
         }
+    }
+    public void registerListener(){
+        crudRealm.realm.addChangeListener(new RealmChangeListener<Realm>() {
+            @Override
+            public void onChange(Realm realm) {
+                realmListener.onUpdate();
+            }
+        });
+    }
+    public void removeListener(){
+        crudRealm.realm.removeAllChangeListeners();
+    }
+    public Realm getRealm(){
+        return crudRealm.realm;
     }
 }

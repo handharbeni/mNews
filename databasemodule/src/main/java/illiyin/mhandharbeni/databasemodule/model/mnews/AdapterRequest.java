@@ -24,7 +24,10 @@ import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Emitter;
 import rx.Observer;
+import rx.Subscription;
+import rx.functions.Cancellable;
 import rx.schedulers.Schedulers;
 
 import static android.content.ContentValues.TAG;
@@ -154,6 +157,66 @@ public class AdapterRequest {
             }
         }
         crudChild.closeRealm();
+    }
+    public void syncFeatureds(){
+        mnewsServices.getFeaturedPosts()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Emitter<ResponseFeaturedPost>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(ResponseFeaturedPost responseFeaturedPost) {
+                        Log.d(TAG, "onNext: Insert New :"+responseFeaturedPost.getSuccess());
+                        if (responseFeaturedPost.getSuccess()){
+                            DataFeaturedPost data = (DataFeaturedPost) responseFeaturedPost.getData();
+                            if (data != null){
+                                DataFeaturedPost dataFeaturedPost = new DataFeaturedPost();
+                                Crud crudFeaturedPost = new Crud(context, dataFeaturedPost);
+                                crudFeaturedPost.openObject();
+                                crudFeaturedPost.deleteAll(DataFeaturedPost.class);
+                                crudFeaturedPost.commitObject();
+                                    /*delete all data featured*/
+                                    /*create new*/
+                                Log.d(TAG, "onNext: Insert New :"+data.getId());
+                                crudFeaturedPost.create(data);
+                                syncProperties(data.getId(), data.getProperties());
+                                crudFeaturedPost.closeRealm();
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void setSubscription(Subscription s) {
+                        if (!s.isUnsubscribed()){
+                            s.unsubscribe();
+                        }
+                    }
+
+                    @Override
+                    public void setCancellation(Cancellable c) {
+                        try {
+                            c.cancel();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public long requested() {
+                        return 0;
+                    }
+                });
     }
     public void syncFeatured(){
         Log.d(TAG, "syncFeatured: ");
@@ -293,16 +356,16 @@ public class AdapterRequest {
                         if (dataResponse.size() > 0){
                             for (DataGetAllPost dGetAllPost:dataResponse){
                                 Log.d(TAG, "onNext: Id :"+dGetAllPost.getId());
-                                Boolean duplicate = crudGetAllPost.checkDuplicate("id", dGetAllPost.getId());
-                                if (duplicate){
+                                RealmResults duplicate = crudGetAllPost.read("slugId", dGetAllPost.getSlugId());
+                                if (duplicate.size() > 0){
                                     /*update data*/
-                                    RealmResults resultsDuplicate = crudGetAllPost.read("id", dGetAllPost.getId());
+                                    RealmResults resultsDuplicate = crudGetAllPost.read("slugId", dGetAllPost.getSlugId());
                                     DataGetAllPost resultData = (DataGetAllPost) resultsDuplicate.get(0);
                                     if (dGetAllPost.getUpdatedAt() != null){
                                         if (!resultData.getUpdatedAt().equalsIgnoreCase(dGetAllPost.getUpdatedAt())){
                                     /*update*/
                                             crudGetAllPost.openObject();
-                                            crudGetAllPost.getRealmObject("id", dGetAllPost.getId());
+                                            crudGetAllPost.getRealmObject("slugId", dGetAllPost.getSlugId());
                                             crudGetAllPost.update(dGetAllPost);
                                             crudGetAllPost.commitObject();
                                         }

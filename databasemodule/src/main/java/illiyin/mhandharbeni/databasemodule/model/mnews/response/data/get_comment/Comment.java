@@ -29,7 +29,7 @@ public class Comment extends RealmObject {
     @SerializedName("author")
     @Expose
     @Ignore
-    private List<Author> author;
+    private Author author;
 
     public Comment() {
     }
@@ -66,11 +66,11 @@ public class Comment extends RealmObject {
         this.createdAt = createdAt;
     }
 
-    public List<Author> getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(List<Author> author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 }

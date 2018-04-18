@@ -4,11 +4,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:background="@color/headline_caption">
 
     <RelativeLayout
-        android:layout_marginTop="@dimen/limabelas_dp"
-        android:layout_marginLeft="@dimen/sepuluh_dp"
-        android:layout_marginRight="@dimen/sepuluh_dp"
-        android:layout_marginBottom="@dimen/sepuluh_dp"
-        android:padding="@dimen/sepuluh_dp"
+        android:layout_marginTop="@dimen/sepuluh_dp"
+        android:layout_marginLeft="@dimen/lima_dp"
+        android:layout_marginRight="@dimen/lima_dp"
+        android:layout_marginBottom="@dimen/lima_dp"
+        android:padding="@dimen/lima_dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -19,14 +19,15 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             app:srcCompat="@drawable/ic_search" />
 
         <EditText
+            android:textSize="15sp"
             android:textColorHint="@color/search_box_hint"
             android:textColor="@color/search_box"
             android:layout_marginLeft="@dimen/sepuluh_dp"

@@ -19,7 +19,6 @@ public class DataGetSinglePost {
     private Single single;
     @SerializedName("related")
     @Expose
-    @Ignore
     private List<Related> related = null;
 
     public DataGetSinglePost() {

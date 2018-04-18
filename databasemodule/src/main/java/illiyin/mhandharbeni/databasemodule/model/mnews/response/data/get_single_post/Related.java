@@ -69,7 +69,7 @@ public class Related extends RealmObject {
     @SerializedName("properties")
     @Expose
     @Ignore
-    private List<Properties> properties;
+    private Properties properties;
     @SerializedName("date_published")
     @Expose
     private String datePublished;
@@ -88,7 +88,7 @@ public class Related extends RealmObject {
     @SerializedName("author")
     @Expose
     @Ignore
-    private List<Author> author;
+    private Author author;
 
     public Related() {
     }
@@ -229,11 +229,11 @@ public class Related extends RealmObject {
         this.view = view;
     }
 
-    public List<Properties> getProperties() {
+    public Properties getProperties() {
         return properties;
     }
 
-    public void setProperties(List<Properties> properties) {
+    public void setProperties(Properties properties) {
         this.properties = properties;
     }
 
@@ -277,11 +277,11 @@ public class Related extends RealmObject {
         this.kategoriSlug = kategoriSlug;
     }
 
-    public List<Author> getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(List<Author> author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 }

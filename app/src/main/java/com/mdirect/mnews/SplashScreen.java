@@ -1,6 +1,9 @@
 package com.mdirect.mnews;
 
+import android.*;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
@@ -31,6 +34,13 @@ public class SplashScreen extends BaseApps{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splashscreen);
         ButterKnife.bind(this);
+
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.INTERNET) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_DENIED) {
+                Intent i = new Intent(this, PermissionPage.class);
+                startActivity(i);
+            }
+        }
     }
 
     @Override
@@ -39,8 +49,12 @@ public class SplashScreen extends BaseApps{
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+            try {
                 initModule();
                 initData();
+            }catch (Exception e){
+                writeLog(e);
+            }
             }
         },5000);
     }

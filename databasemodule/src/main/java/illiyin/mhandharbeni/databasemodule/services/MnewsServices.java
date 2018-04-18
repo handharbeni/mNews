@@ -37,7 +37,6 @@ public interface MnewsServices {
             "Content-Type: application/json",
             "mnewstoken: "+mnewstoken
     })
-    @FormUrlEncoded
     @GET("post/{page}")
     Call<ResponseGetSinglePost> getSinglePost(@Path("page") String page);
 
@@ -92,7 +91,6 @@ public interface MnewsServices {
             "Content-Type: application/json",
             "mnewstoken: "+mnewstoken
     })
-    @FormUrlEncoded
     @GET("comments/list/{posts}")
     Call<ResponseGetComment> getComment(@Path("posts") String posts, @Query("page") String page);
 
