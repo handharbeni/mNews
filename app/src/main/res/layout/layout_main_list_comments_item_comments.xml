@@ -1,40 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_marginRight="@dimen/limabelas_dp"
+        android:id="@+id/imgMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/ic_expand_more_black_18dp" />
+
     <LinearLayout
-        android:padding="@dimen/sepuluh_dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_marginRight="@dimen/dualima_dp"
+            android:padding="@dimen/sepuluh_dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:padding="@dimen/sepuluh_dp"
+                android:text="Nama"
+                android:id="@+id/txtCommentNama"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="12sp"
+                android:padding="@dimen/sepuluh_dp"
+                android:text="Jam"
+                android:id="@+id/txtCommentJam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
         <TextView
-            android:textStyle="bold"
+            android:layout_marginRight="@dimen/dualima_dp"
             android:textSize="16sp"
-            android:padding="@dimen/sepuluh_dp"
-            android:text="Nama"
-            android:id="@+id/txtCommentNama"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtCommentComment"
+            android:padding="@dimen/duapuluh_dp"
+            android:text="Uniquely fabricate clicks mortar quality vectors via client-based growth strategies. Completely synthesize high-payoff"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView
-            android:textSize="12sp"
-            android:padding="@dimen/sepuluh_dp"
-            android:text="Jam"
-            android:id="@+id/txtCommentJam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <View
+            android:layout_marginLeft="@dimen/sepuluh_dp"
+            android:layout_marginRight="@dimen/sepuluh_dp"
+            android:background="@drawable/ic_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"/>
     </LinearLayout>
-    <TextView
-        android:textSize="16sp"
-        android:id="@+id/txtCommentComment"
-        android:padding="@dimen/duapuluh_dp"
-        android:text="Uniquely fabricate clicks mortar quality vectors via client-based growth strategies. Completely synthesize high-payoff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <View
-        android:layout_marginLeft="@dimen/sepuluh_dp"
-        android:layout_marginRight="@dimen/sepuluh_dp"
-        android:background="@drawable/ic_line"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"/>
-</LinearLayout>
+
+</RelativeLayout>

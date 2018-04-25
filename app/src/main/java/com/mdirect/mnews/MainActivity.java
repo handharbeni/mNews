@@ -1,16 +1,9 @@
 package com.mdirect.mnews;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -30,7 +23,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import illiyin.mhandharbeni.crudrealmmodul.CRUDRealm;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.DataMenus;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import io.realm.RealmChangeListener;

@@ -1,14 +1,14 @@
 package com.mdirect.mnews.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,20 +17,24 @@ import com.mdirect.mnews.R;
 import com.mdirect.mnews.adapter.AdapterItemComment;
 import com.mdirect.mnews.utils.ClickListener;
 
-import java.io.IOException;
-import java.security.spec.ECField;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnTouch;
 import illiyin.mhandharbeni.databasemodule.generator.ServiceGenerator;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseDeleteComment;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetComment;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseReportComment;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_comment.Comment;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_comment.DataGetComment;
 import illiyin.mhandharbeni.databasemodule.services.MnewsServices;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -97,10 +101,64 @@ public class ListComment extends BaseApps implements ClickListener {
 
     @OnTouch(R.id.etSendComment)
     boolean onSendTouch(){
-        showToast("Touched");
+        if (!isLoggedIn()){
+            String url = MDIRECT_LOGIN_URL+"?appid="+APP_ID+"&next="+REDIRECT_URI;
+            Intent intent = new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(url));
+            startActivity(intent);
+        }
         return false;
     }
 
+    @OnClick(R.id.btnSendComment)
+    public void doSendComment(){
+        if (!isLoggedIn()){
+            onSendTouch();
+        }else{
+            String token = getAccessToken();
+            String comment = etSendComment.getText().toString();
+
+            Map<String, String> headers = new HashMap<>();
+            headers.put("usertoken", token);
+            headers.put("mnewstoken", MnewsServices.mnewstoken);
+
+            showLog("usertoken used token ", token);
+
+            Call<ResponseGetComment> sendComment = mnewsServices.postComment(headers, slug_id, comment);
+            sendComment.enqueue(new Callback<ResponseGetComment>() {
+                @Override
+                public void onResponse(Call<ResponseGetComment> call, Response<ResponseGetComment> response) {
+                    if (response.isSuccessful()){
+                        etSendComment.setText("");
+                        Call<ResponseGetComment> callComments = mnewsServices.getComment(slug_id, "1");
+                        new callComment().execute(callComments);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseGetComment> call, Throwable t) {
+                    showToast("Gagal mengirim komentar, Coba lagi ...");
+                }
+            });
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        http://localhost/login/callback?token=OFnGtZEsyIdZXzrQp2HxELIVeUpVVwRun03e1QdbLiBXOqWBEeJOnthsQDSlSMrzi6NYiKZa20I9Amx7Isd0JwsWHuyBnJGLRsjaWJeQ1t7JffMqDaGXJAFlRFXmII7D&next=intent%253A%252F%252Flogin%253Fcode%253D%257BCODE%257D&withmail=
+        if (getIntent().getData() != null){
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+                String code = uri.getQueryParameter("token");
+                if (code != null) {
+                    setSession(code);
+                } else if (uri.getQueryParameter("error") != null) {
+                    showToast("Terjadi Error, Silakan Login kembali");
+                }
+            }
+        }
+    }
     private void initList(){
         Call<ResponseGetComment> call = mnewsServices.getComment(slug_id, "1");
         new callComment().execute(call);
@@ -180,5 +238,70 @@ public class ListComment extends BaseApps implements ClickListener {
             rvComment.setLayoutManager(llm);
             rvComment.setAdapter(adapterItemComment);
         }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle().toString().equalsIgnoreCase("HAPUS")){
+            deleteComment(item.getOrder());
+        }else if(item.getTitle().toString().equalsIgnoreCase("LAPORKAN")){
+            reportComment(item.getOrder());
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void deleteComment(int id){
+        String token = getAccessToken();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("usertoken", token);
+        headers.put("mnewstoken", MnewsServices.mnewstoken);
+
+        showLog("usertoken used token ", token);
+
+        Call<ResponseDeleteComment> sendComment = mnewsServices.deleteComment(headers, String.valueOf(id));
+        sendComment.enqueue(new Callback<ResponseDeleteComment>() {
+            @Override
+            public void onResponse(Call<ResponseDeleteComment> call, Response<ResponseDeleteComment> response) {
+                if (response.isSuccessful()){
+                    showToast("Hapus Komentar berhasil ..");
+                    etSendComment.setText("");
+                    Call<ResponseGetComment> callComments = mnewsServices.getComment(slug_id, "1");
+                    new callComment().execute(callComments);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDeleteComment> call, Throwable t) {
+                showToast("Hapus Komentar gagal, silakan coba lagi ..");
+            }
+        });
+    }
+    private void reportComment(int id){
+        String token = getAccessToken();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("usertoken", token);
+        headers.put("mnewstoken", MnewsServices.mnewstoken);
+
+        showLog("usertoken used token ", token);
+
+        Call<ResponseReportComment> sendComment = mnewsServices.reportComment(headers, String.valueOf(id));
+        sendComment.enqueue(new Callback<ResponseReportComment>() {
+            @Override
+            public void onResponse(Call<ResponseReportComment> call, Response<ResponseReportComment> response) {
+                if (response.isSuccessful()){
+                    showToast("Laporan Komentar berhasil ..");
+                    etSendComment.setText("");
+                    Call<ResponseGetComment> callComments = mnewsServices.getComment(slug_id, "1");
+                    new callComment().execute(callComments);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseReportComment> call, Throwable t) {
+                showToast("Laporan Komentar gagal, silakan coba lagi ..");
+            }
+        });
     }
 }

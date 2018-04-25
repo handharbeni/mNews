@@ -16,6 +16,7 @@ public class Session implements EncryptedPreferences.OnSharedPreferenceChangeLis
             NOTELP = "NOTELP",
             EMAIL = "EMAIL",
             KEY = "TOKEN",
+            KEY_TOKEN = "ACCESS_TOKEN",
             STATUS = "STATUS",
             CONNECTION = "CONNECTION",
             IMAGE = "IMAGE";
@@ -44,6 +45,12 @@ public class Session implements EncryptedPreferences.OnSharedPreferenceChangeLis
     }
     public String getToken(){
         return encryptedPreferences.getUtils().decryptStringValue(encryptedPreferences.getString(KEY, defaultKey));
+    }
+    public void encryptValue(String value){
+        encryptedPreferences.getUtils().encryptStringValue(value);
+    }
+    public String decryptValue(String value){
+        return encryptedPreferences.getUtils().decryptStringValue(value);
     }
     public void setCustomParams(String key, String value){
         encryptedPreferences.edit()

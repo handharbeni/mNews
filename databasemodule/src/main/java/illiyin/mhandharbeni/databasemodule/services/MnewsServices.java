@@ -1,5 +1,8 @@
 package illiyin.mhandharbeni.databasemodule.services;
 
+import java.util.Map;
+
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseDeleteComment;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseFeaturedPost;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetAbout;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetAllPost;
@@ -9,13 +12,16 @@ import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetMenus
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetPostByTags;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetPostKategori;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetSinglePost;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseReportComment;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseSearchPost;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -115,27 +121,25 @@ public interface MnewsServices {
     @GET("about")
     Call<ResponseGetAbout> getAbout();
 
-    @Headers({
-            "Content-Type: application/json",
-            "mnewstoken: "+mnewstoken
-    })
+//    @Headers({
+//            "Content-Type: application/json",
+//            "mnewstoken: "+mnewstoken
+//    })
     @FormUrlEncoded
-    @GET("categories")
-    Call<ResponseGetKategori> postComment(@Header("usertoken") String usertoken, @Field("post_slug") String post_slug, @Field("Comment") String comment);
+    @POST("comments/new")
+    Call<ResponseGetComment> postComment(@HeaderMap Map<String, String> header, @Field("post_slug") String post_slug, @Field("comment") String comment);
 
-    @Headers({
-            "Content-Type: application/json",
-            "mnewstoken: "+mnewstoken
-    })
-    @FormUrlEncoded
-    @GET("comments/report/{id}")
-    Call<ResponseGetKategori> reportComment(@Header("usertoken") String usertoken, @Path("id") String id);
+//    @Headers({
+//            "Content-Type: application/json",
+//            "mnewstoken: "+mnewstoken
+//    })
+    @POST("comments/report/{id}")
+    Call<ResponseReportComment> reportComment(@HeaderMap Map<String, String> header, @Path("id") String id);
 
-    @Headers({
-            "Content-Type: application/json",
-            "mnewstoken: "+mnewstoken
-    })
-    @FormUrlEncoded
-    @GET("comments/delete/{id}")
-    Call<ResponseGetKategori> deleteComment(@Header("usertoken") String usertoken, @Path("id") String id);
+//    @Headers({
+//            "Content-Type: application/json",
+//            "mnewstoken: "+mnewstoken
+//    })
+    @POST("comments/delete/{id}")
+    Call<ResponseDeleteComment> deleteComment(@HeaderMap Map<String, String> header, @Path("id") String id);
 }

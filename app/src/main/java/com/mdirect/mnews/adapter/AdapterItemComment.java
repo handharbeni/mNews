@@ -3,9 +3,11 @@ package com.mdirect.mnews.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mdirect.mnews.R;
@@ -42,11 +44,19 @@ public class AdapterItemComment extends RecyclerView.Adapter<AdapterItemComment.
 
     @Override
     public void onBindViewHolder(@NonNull AdapterItemComment.Holder holder, int position) {
-        Comment comment = (Comment) listComment.get(position);
-        Author author = (Author) comment.getAuthor();
+        final Comment comment = listComment.get(position);
+        Author author = comment.getAuthor();
         holder.txtCommentNama.setText(author.getName());
         holder.txtCommentJam.setText(comment.getCreatedAt());
         holder.txtCommentComment.setText(comment.getContent());
+        holder.imgMenu.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                menu.setHeaderTitle("MENU");
+                menu.add(0, v.getId(), comment.getId(), "HAPUS");
+                menu.add(0, v.getId(), comment.getId(), "LAPORKAN");
+            }
+        });
     }
 
     @Override
@@ -61,6 +71,8 @@ public class AdapterItemComment extends RecyclerView.Adapter<AdapterItemComment.
         TextView txtCommentJam;
         @BindView(R.id.txtCommentComment)
         TextView txtCommentComment;
+        @BindView(R.id.imgMenu)
+        ImageView imgMenu;
 
         public Holder(View itemView) {
             super(itemView);
