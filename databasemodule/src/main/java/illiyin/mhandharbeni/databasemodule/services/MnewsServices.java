@@ -14,6 +14,7 @@ import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetPostK
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetSinglePost;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseReportComment;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseSearchPost;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.general.StringResponse;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -58,7 +59,6 @@ public interface MnewsServices {
             "Content-Type: application/json",
             "mnewstoken: "+mnewstoken
     })
-    @FormUrlEncoded
     @GET("category/{post}")
     Call<ResponseGetPostKategori> getPostCategory(@Path("post") String post, @Query("page") String page);
 
@@ -112,14 +112,14 @@ public interface MnewsServices {
             "mnewstoken: "+mnewstoken
     })
     @GET("tos")
-    Call<ResponseGetKategori> getTOS();
+    Call<StringResponse> getTOS();
 
     @Headers({
             "Content-Type: application/json",
             "mnewstoken: "+mnewstoken
     })
     @GET("about")
-    Call<ResponseGetAbout> getAbout();
+    Call<StringResponse> getAbout();
 
 //    @Headers({
 //            "Content-Type: application/json",
