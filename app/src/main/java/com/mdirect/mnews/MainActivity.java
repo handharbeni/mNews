@@ -1,6 +1,7 @@
 package com.mdirect.mnews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -10,11 +11,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper;
+import com.mdirect.mnews.activity.MenuActivity;
 import com.mdirect.mnews.adapter.TabsPagerAdapter;
 
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.DataMenus;
 import illiyin.mhandharbeni.realmlibrary.Crud;
@@ -31,6 +35,10 @@ import io.realm.RealmResults;
 
 public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedListener {
     private static final String TAG = "MainActivity";
+
+    public static final String KEY_POSITION = "key_position";
+    public Integer currentPosition = 0;
+
 
     @Nullable
     @BindView(R.id.mainStub)
@@ -42,6 +50,9 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
 
     @BindView(R.id.etSearch)
     TextView etSearch;
+
+    @BindView(R.id.imgMenu)
+    ImageView imgMenu;
 
     private Crud crudMenus;
 
@@ -71,6 +82,12 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
         hiddenSearch();
     }
 
+
+    @OnClick(R.id.imgMenu)
+    public void onMenuClick(){
+        Intent i = new Intent(this, MenuActivity.class);
+        startActivity(i);
+    }
 
     private void initSearch(){
         etSearch.addTextChangedListener(new TextWatcher() {
@@ -193,6 +210,9 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
 
         public void initParameter(){
             listItem = new ArrayList<>();
+            showLog(KEY_POSITION, getCustomPreferences(KEY_POSITION));
+            currentPosition = !getCustomPreferences(KEY_POSITION).equalsIgnoreCase("nothing") ?
+                    Integer.valueOf(getCustomPreferences(KEY_POSITION))-1:currentPosition;
         }
 
         public void initData(){
@@ -221,7 +241,6 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
             if (tabLayout != null && pager != null){
                 tabsPagerAdapter = new TabsPagerAdapter(this.context, getSupportFragmentManager(), listItem);
                 pager.setAdapter(tabsPagerAdapter);
-                pager.setCurrentItem(0);
 
                 TabLayoutHelper mTabLayoutHelper = new TabLayoutHelper(tabLayout, pager);
                 mTabLayoutHelper.setAutoAdjustTabModeEnabled(false);
@@ -229,6 +248,9 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
                 tabLayout.setTabTextColors(getResources().getColor(R.color.article_normal), getResources().getColor(R.color.tagline_active));
                 tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.tagline_active));
                 setDividerTabLayout();
+
+                pager.setCurrentItem(currentPosition);
+                pager.setActivated(true);
             }
         }
         public void setViewPagerUpdate(){
@@ -242,6 +264,9 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
                 tabLayout.setTabTextColors(getResources().getColor(R.color.article_normal), getResources().getColor(R.color.tagline_active));
                 tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.tagline_active));
                 setDividerTabLayout();
+
+                pager.setCurrentItem(currentPosition);
+                pager.setActivated(true);
             }
         }
 

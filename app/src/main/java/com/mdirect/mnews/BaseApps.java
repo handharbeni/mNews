@@ -117,6 +117,12 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
     public String getAccessToken(){
         return session.getCustomParams(Session.KEY_TOKEN, "aJ5QElpvadHaiz7mcPNPVQx0P3Xxx0P3Xx");
     }
+    public void setCustomPreferences(String key, String value){
+        session.setCustomParams(key, value);
+    }
+    public String getCustomPreferences(String key){
+        return session.getCustomParams(key, "nothing");
+    }
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

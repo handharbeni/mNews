@@ -8,9 +8,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
+import com.mdirect.mnews.MainActivity;
 import com.mdirect.mnews.fragment.FragmentItemNews;
 
 import java.util.List;
+
+import illiyin.mhandharbeni.sessionlibrary.Session;
+import illiyin.mhandharbeni.sessionlibrary.SessionListener;
 
 /**
  * Created by Beni on 23/03/2018.
@@ -20,12 +24,19 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
     private Context ctx;
     private List<String> data;
     private Fragment[] fragments;
+    private Session session;
 
     public TabsPagerAdapter(Context ctx, FragmentManager fm, List<String> data) {
         super(fm);
         this.ctx = ctx;
         this.data = data;
         fragments = new Fragment[data.size()];
+        session = new Session(this.ctx, new SessionListener() {
+            @Override
+            public void sessionChange() {
+
+            }
+        });
     }
 
     @Override
@@ -37,7 +48,9 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
         dinamisFragment.setIds(id);
         fragment = dinamisFragment;
 
+        session.setCustomParams(MainActivity.KEY_POSITION, 0);
         if (fragments[position] == null) {
+            session.setCustomParams(MainActivity.KEY_POSITION, position);
             fragments[position] = fragment;
         }
         return fragments[position];

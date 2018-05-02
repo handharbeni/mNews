@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:id="@+id/appbar_layout"
+        app:contentInsetStart="0dp"
+        app:contentInsetEnd="0dp"
+        app:elevation="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@color/headline_caption"
+            app:contentScrim="@color/headline_caption">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/headline_caption"
+                android:gravity="center"
+                app:contentInsetEnd="0dp"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+                <RelativeLayout
+                    android:padding="@dimen/lima_dp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_centerInParent="true"
+                        android:id="@+id/imgClose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:padding="@dimen/lima_dp"
+                        app:srcCompat="@drawable/ic_close" />
+                    <LinearLayout
+                        android:layout_centerInParent="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:src="@drawable/m_news_logo" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:background="@color/colorBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imgUser"
+                android:layout_marginTop="@dimen/lima_dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/drawable_rounded_grey"
+                android:src="@drawable/group_2"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:padding="@dimen/lima_dp"
+                android:gravity="center"
+                android:text="Muhammad Handharbeni"
+                android:id="@+id/txtUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/imgUser" />
+            <LinearLayout
+                android:padding="@dimen/lima_dp"
+                android:layout_below="@+id/txtUsername"
+                android:orientation="vertical"
+                android:id="@+id/llMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:id="@+id/rlBeranda"
+                    android:padding="@dimen/lima_dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_centerVertical="true"
+                        android:id="@+id/icMenuHome"
+                        app:srcCompat="@drawable/ic_menu_home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_marginLeft="@dimen/limabelas_dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/icMenuHome"
+                        android:text="Beranda"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/rlKanal"
+                    android:padding="@dimen/lima_dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_centerVertical="true"
+                        android:id="@+id/icMenuKanal"
+                        app:srcCompat="@drawable/ic_menu_book"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_marginLeft="@dimen/limabelas_dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/icMenuKanal"
+                        android:text="Kanal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:paddingLeft="@dimen/tigapuluh_dp"
+                    android:id="@+id/rvItemKanal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+                <RelativeLayout
+                    android:id="@+id/rlProfil"
+                    android:padding="@dimen/lima_dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_centerVertical="true"
+                        android:id="@+id/icMenuProfile"
+                        app:srcCompat="@drawable/ic_menu_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_marginLeft="@dimen/limabelas_dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/icMenuProfile"
+                        android:text="Profil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+                <ImageView
+                    android:layout_marginTop="@dimen/lima_dp"
+                    android:src="@drawable/ic_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:padding="@dimen/sepuluh_dp"
+                android:orientation="vertical"
+                android:layout_below="@+id/llMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:padding="@dimen/lima_dp"
+                    android:id="@+id/txtKeluar"
+                    android:text="Keluar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:padding="@dimen/lima_dp"
+                    android:id="@+id/txtAturanKebijakan"
+                    android:text="Aturan Kebijakan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:padding="@dimen/lima_dp"
+                    android:id="@+id/txtTentangKami"
+                    android:text="Tentang Kami"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:paddingTop="@dimen/sepuluh_dp"
+                android:padding="@dimen/duapuluh_dp"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/socFacebook"
+                    app:srcCompat="@drawable/ic_soc_facebook"
+                    android:background="@drawable/drawable_rounded_grey"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp" />
+                <ImageView
+                    android:id="@+id/socTwitter"
+                    android:layout_marginLeft="@dimen/sepuluh_dp"
+                    app:srcCompat="@drawable/ic_soc_twitter"
+                    android:background="@drawable/drawable_rounded_grey"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp" />
+                <ImageView
+                    android:id="@+id/socInstagram"
+                    android:layout_marginLeft="@dimen/sepuluh_dp"
+                    app:srcCompat="@drawable/ic_soc_instagram"
+                    android:background="@drawable/drawable_rounded_grey"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp" />
+                <ImageView
+                    android:id="@+id/socGooglePlus"
+                    android:layout_marginLeft="@dimen/sepuluh_dp"
+                    app:srcCompat="@drawable/ic_soc_google_plus"
+                    android:background="@drawable/drawable_rounded_grey"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp" />
+                <ImageView
+                    android:id="@+id/socLinkedin"
+                    android:layout_marginLeft="@dimen/sepuluh_dp"
+                    app:srcCompat="@drawable/ic_soc_linkedin"
+                    android:background="@drawable/drawable_rounded_grey"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>
