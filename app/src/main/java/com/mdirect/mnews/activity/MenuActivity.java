@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.mdirect.mnews.BaseApps;
 import com.mdirect.mnews.R;
 import com.mdirect.mnews.adapter.AdapterItemKanal;
+import com.mdirect.mnews.utils.ClickListener;
 
 import java.util.ArrayList;
 
@@ -23,12 +24,13 @@ import illiyin.mhandharbeni.realmlibrary.Crud;
 import io.realm.RealmResults;
 
 import static com.mdirect.mnews.activity.FullHtmlActivity.KEY_FIELD;
+import static com.mdirect.mnews.activity.ListNewsKategori.KEY_SLUG;
 
 /**
  * Created by Beni on 01/05/2018.
  */
 
-public class MenuActivity extends BaseApps {
+public class MenuActivity extends BaseApps implements ClickListener {
     @BindView(R.id.imgClose)
     ImageView imgClose;
 
@@ -126,7 +128,7 @@ public class MenuActivity extends BaseApps {
             listKanal.add(dMenu);
         }
 
-        adapterItemKanal = new AdapterItemKanal(listKanal, this);
+        adapterItemKanal = new AdapterItemKanal(listKanal, this, this);
         rvItemKanal.setAdapter(adapterItemKanal);
 
 
@@ -139,4 +141,18 @@ public class MenuActivity extends BaseApps {
 
     }
 
+    @Override
+    public void clicked(int id) {
+
+    }
+
+    @Override
+    public void clicked(String id) {
+        Bundle bundle = new Bundle();
+        bundle.putString(ListNewsKategori.KEY_SLUG, id);
+
+        Intent i = new Intent(this, ListNewsKategori.class);
+        i.putExtras(bundle);
+        startActivity(i);
+    }
 }

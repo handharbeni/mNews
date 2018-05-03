@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mdirect.mnews.R;
+import com.mdirect.mnews.utils.ClickListener;
 
 import java.util.ArrayList;
 
@@ -20,10 +21,12 @@ import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.D
 public class AdapterItemKanal extends RecyclerView.Adapter<AdapterItemKanal.ViewHolder>{
     private ArrayList<DataMenus> listKanal;
     private Context context;
+    private ClickListener clickListener;
 
-    public AdapterItemKanal(ArrayList<DataMenus> listKanal, Context context) {
+    public AdapterItemKanal(ArrayList<DataMenus> listKanal, Context context, ClickListener clickListener) {
         this.listKanal = listKanal;
         this.context = context;
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -36,6 +39,12 @@ public class AdapterItemKanal extends RecyclerView.Adapter<AdapterItemKanal.View
     public void onBindViewHolder(@NonNull AdapterItemKanal.ViewHolder holder, int position) {
         final DataMenus dataMenus = listKanal.get(position);
         holder.titleKanal.setText(dataMenus.getName());
+        holder.mainItemKanal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.clicked(dataMenus.getSlug());
+            }
+        });
     }
 
     @Override
