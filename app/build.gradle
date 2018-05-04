@@ -22,6 +22,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.config
         generatedDensities = []
+        multiDexEnabled true //Add this
     }
     aaptOptions {
         additionalParameters "--no-version-vectors"
@@ -48,6 +49,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-vector-drawable:27.1.1'
@@ -56,7 +58,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.h6ah4i.android.tablayouthelper:tablayouthelper:0.8.0'
     implementation 'com.github.bumptech.glide:glide:4.6.1'
-    implementation 'com.google.firebase:firebase-crash:15.0.0'
+    implementation 'com.google.firebase:firebase-crash:15.0.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     implementation 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
     implementation 'de.hdodenhof:circleimageview:2.2.0'

@@ -23,7 +23,7 @@ dependencies {
     implementation project(path: ':realmlibrary')
     implementation project(path: ':networklibrary')
     implementation project(path: ':sessionlibrary')
-    implementation 'com.google.firebase:firebase-crash:15.0.0'
+    implementation 'com.google.firebase:firebase-crash:15.0.2'
 
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'

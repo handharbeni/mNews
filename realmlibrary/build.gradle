@@ -20,7 +20,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'illiyin.mhandharbeni.crudrealmmodul:crudrealmmodul:0.4.1'
-    implementation 'com.google.firebase:firebase-crash:15.0.0'
+    implementation 'com.google.firebase:firebase-crash:15.0.2'
 }
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
