@@ -1,6 +1,7 @@
 package com.mdirect.mnews.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mdirect.mnews.BaseApps;
 import com.mdirect.mnews.R;
 import com.mdirect.mnews.adapter.AdapterItemKanal;
@@ -19,7 +21,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import illiyin.mhandharbeni.databasemodule.generator.ServiceGeneratorAccount;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.DataMenus;
+import illiyin.mhandharbeni.databasemodule.services.MdirectAccountServices;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import io.realm.RealmResults;
 
@@ -46,6 +50,9 @@ public class MenuActivity extends BaseApps implements ClickListener {
     @BindView(R.id.txtKeluar)
     TextView txtKeluar;
 
+    @BindView(R.id.txtLogin)
+    TextView txtLogin;
+
     @BindView(R.id.txtAturanKebijakan)
     TextView txtAturanKebijakan;
 
@@ -54,6 +61,9 @@ public class MenuActivity extends BaseApps implements ClickListener {
 
     @BindView(R.id.rvItemKanal)
     RecyclerView rvItemKanal;
+
+    @BindView(R.id.imgUser) ImageView imgUser;
+    @BindView(R.id.txtUsername) TextView txtUsername;
 
 
     private Crud crudMenus;
@@ -66,7 +76,74 @@ public class MenuActivity extends BaseApps implements ClickListener {
         setContentView(R.layout.layout_menu);
 
         ButterKnife.bind(this);
+
+
+        initFeature();
+        initDataProfil();
         populateDataKanal();
+    }
+
+    public void initDataProfil(){
+        String fotoProfil = getCustomPreferences(KEY_FOTOPROFILE);
+        String nama = getCustomPreferences(KEY_NAME);
+        if (!fotoProfil.equalsIgnoreCase("nothing")){
+            /*load image user*/
+            Glide.with(this).load(fotoProfil).into(imgUser);
+        }else if(!nama.equalsIgnoreCase("nothing")){
+            /*load name user*/
+            txtUsername.setText(nama);
+        }else if(!fotoProfil.equalsIgnoreCase("nothing") && !nama.equalsIgnoreCase("nothing")){
+            /*load all*/
+            Glide.with(this).load(fotoProfil).into(imgUser);
+            txtUsername.setText(nama);
+        }
+    }
+
+    private void initFeature(){
+        if (!isLoggedIn()){
+            rlProfil.setVisibility(View.GONE);
+            txtKeluar.setVisibility(View.GONE);
+            imgUser.setVisibility(View.GONE);
+            txtUsername.setVisibility(View.GONE);
+            txtLogin.setVisibility(View.VISIBLE);
+        }else{
+            rlProfil.setVisibility(View.VISIBLE);
+            txtKeluar.setVisibility(View.VISIBLE);
+            imgUser.setVisibility(View.VISIBLE);
+            txtUsername.setVisibility(View.VISIBLE);
+            txtLogin.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.txtLogin)
+    public void login(){
+        Intent i = new Intent(this, Login.class);
+        startActivity(i);
+//        if (!isLoggedIn()){
+//            String url = MDIRECT_LOGIN_URL+"?appid="+APP_ID+"&next="+REDIRECT_URI_MENU;
+//            showLog("usertoken", url);
+//            Intent intent = new Intent(
+//                    Intent.ACTION_VIEW,
+//                    Uri.parse(url));
+//            startActivityForResult(intent, 01);
+//        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        http://localhost/login/callback?token=OFnGtZEsyIdZXzrQp2HxELIVeUpVVwRun03e1QdbLiBXOqWBEeJOnthsQDSlSMrzi6NYiKZa20I9Amx7Isd0JwsWHuyBnJGLRsjaWJeQ1t7JffMqDaGXJAFlRFXmII7D&next=intent%253A%252F%252Flogin%253Fcode%253D%257BCODE%257D&withmail=
+        if (getIntent().getData() != null){
+            Uri uri = getIntent().getData();
+            if (uri != null) {
+                String code = uri.getQueryParameter("token");
+                if (code != null) {
+                    setSession(code);
+                } else if (uri.getQueryParameter("error") != null) {
+                    showToast("Terjadi Error, Silakan Login kembali");
+                }
+            }
+        }
     }
 
     @OnClick(R.id.imgClose)
@@ -93,7 +170,11 @@ public class MenuActivity extends BaseApps implements ClickListener {
     }
     @OnClick(R.id.txtKeluar)
     public void clickKeluar(){
-
+        Boolean keluar = logout();
+        showLog("usertoken", String.valueOf(keluar));
+        if (keluar){
+            finished();
+        }
     }
     @OnClick(R.id.txtAturanKebijakan)
     public void clickAturanKebijakan(){

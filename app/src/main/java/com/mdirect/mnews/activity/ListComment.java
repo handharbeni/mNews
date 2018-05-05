@@ -101,13 +101,15 @@ public class ListComment extends BaseApps implements ClickListener {
 
     @OnTouch(R.id.etSendComment)
     boolean onSendTouch(){
-        if (!isLoggedIn()){
-            String url = MDIRECT_LOGIN_URL+"?appid="+APP_ID+"&next="+REDIRECT_URI;
-            Intent intent = new Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(url));
-            startActivity(intent);
-        }
+        Intent i = new Intent(this, Login.class);
+        startActivity(i);
+//        if (!isLoggedIn()){
+//            String url = MDIRECT_LOGIN_URL+"?appid="+APP_ID+"&next="+REDIRECT_URI;
+//            Intent intent = new Intent(
+//                    Intent.ACTION_VIEW,
+//                    Uri.parse(url));
+//            startActivityForResult(intent, 02);
+//        }
         return false;
     }
 

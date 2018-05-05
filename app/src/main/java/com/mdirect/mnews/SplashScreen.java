@@ -1,6 +1,5 @@
 package com.mdirect.mnews;
 
-import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -50,6 +49,7 @@ public class SplashScreen extends BaseApps{
             @Override
             public void run() {
             try {
+                getMe();
                 initModule();
                 initData();
             }catch (Exception e){

@@ -1,11 +1,18 @@
 package illiyin.mhandharbeni.databasemodule.services;
 
+import java.util.Map;
+
+import illiyin.mhandharbeni.databasemodule.model.account.response.ResponseUserProfile;
 import illiyin.mhandharbeni.databasemodule.model.account.response.data.account.RequestToken;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseDeleteComment;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 import static illiyin.mhandharbeni.databasemodule.services.MnewsServices.mnewstoken;
 
@@ -22,4 +29,11 @@ public interface MdirectAccountServices {
     @FormUrlEncoded
     @POST("token_request")
     Call<RequestToken> getAccessToken(@Field("token") String token);
+
+    @GET("me")
+    Call<ResponseUserProfile> getMe(@HeaderMap Map<String, String> header);
+
+
+    @GET("logout")
+    Call<ResponseUserProfile> logout(@HeaderMap Map<String, String> header);
 }
