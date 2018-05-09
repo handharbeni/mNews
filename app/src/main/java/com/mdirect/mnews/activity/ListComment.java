@@ -101,8 +101,10 @@ public class ListComment extends BaseApps implements ClickListener {
 
     @OnTouch(R.id.etSendComment)
     boolean onSendTouch(){
-        Intent i = new Intent(this, Login.class);
-        startActivity(i);
+        if (!isLoggedIn()){
+            Intent i = new Intent(this, Login.class);
+            startActivity(i);
+        }
 //        if (!isLoggedIn()){
 //            String url = MDIRECT_LOGIN_URL+"?appid="+APP_ID+"&next="+REDIRECT_URI;
 //            Intent intent = new Intent(
@@ -145,22 +147,22 @@ public class ListComment extends BaseApps implements ClickListener {
             });
         }
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        http://localhost/login/callback?token=OFnGtZEsyIdZXzrQp2HxELIVeUpVVwRun03e1QdbLiBXOqWBEeJOnthsQDSlSMrzi6NYiKZa20I9Amx7Isd0JwsWHuyBnJGLRsjaWJeQ1t7JffMqDaGXJAFlRFXmII7D&next=intent%253A%252F%252Flogin%253Fcode%253D%257BCODE%257D&withmail=
-        if (getIntent().getData() != null){
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-                String code = uri.getQueryParameter("token");
-                if (code != null) {
-                    setSession(code);
-                } else if (uri.getQueryParameter("error") != null) {
-                    showToast("Terjadi Error, Silakan Login kembali");
-                }
-            }
-        }
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+////        http://localhost/login/callback?token=OFnGtZEsyIdZXzrQp2HxELIVeUpVVwRun03e1QdbLiBXOqWBEeJOnthsQDSlSMrzi6NYiKZa20I9Amx7Isd0JwsWHuyBnJGLRsjaWJeQ1t7JffMqDaGXJAFlRFXmII7D&next=intent%253A%252F%252Flogin%253Fcode%253D%257BCODE%257D&withmail=
+//        if (getIntent().getData() != null){
+//        Uri uri = getIntent().getData();
+//        if (uri != null) {
+//                String code = uri.getQueryParameter("token");
+//                if (code != null) {
+//                    setSession(code);
+//                } else if (uri.getQueryParameter("error") != null) {
+//                    showToast("Terjadi Error, Silakan Login kembali");
+//                }
+//            }
+//        }
+//    }
     private void initList(){
         Call<ResponseGetComment> call = mnewsServices.getComment(slug_id, "1");
         new callComment().execute(call);

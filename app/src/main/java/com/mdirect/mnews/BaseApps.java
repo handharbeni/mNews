@@ -1,6 +1,7 @@
 package com.mdirect.mnews;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.net.Uri;
@@ -92,6 +93,10 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
 
     private MdirectAccountServices mdirectAccountServices;
 
+    public Context context;
+
+    private Class<? extends BaseApps> aClass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +122,18 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
         initModule();
         startModule();
     }
+    public void setClass(Class<? extends BaseApps> aClass){
+        this.aClass = aClass;
+    }
+    public Class getClas(){
+        return aClass;
+    }
+    public void setContext(Context contexts){
+        this.context = contexts;
+    }
+    public Context getContexts(){
+        return this.context;
+    }
     public boolean isLoggedIn(){
         boolean loggedIn = false;
         if (getAccessToken() != null){
@@ -131,10 +148,10 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
     public String getSession(){
         return session.getCustomParams(Session.KEY, "aJ5QElpvadHaiz7mcPNPVQx0P3Xxx0P3Xx");
     }
+    public String getPreferences(String key){
+        return session.getCustomParams(key, "-");
+    }
     public void setSession(String key){
-        showLog("usertoken real token", key);
-        showLog("usertoken", session.decryptString("aJ5QElpvadHaiz7mcPNPVQx0P3Xxx0P3Xx"));
-
         Call<RequestToken> call = mdirectAccountServices.getAccessToken(key);
         new getAccesToken().execute(call);
 
@@ -204,26 +221,26 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
                             setCustomPreferences(KEY_USERNAME, dataUserProfile.getUsername());
                             setCustomPreferences(KEY_NAME, dataUserProfile.getName());
                             setCustomPreferences(KEY_EMAIL, dataUserProfile.getEmail());
-                            setCustomPreferences(KEY_PHONENUMBER, dataUserProfile.getPhoneNumber());
-                            setCustomPreferences(KEY_FOTOPROFILE, dataUserProfile.getFotoProfil());
-                            setCustomPreferences(KEY_JABATAN, dataUserProfile.getJabatan());
-                            setCustomPreferences(KEY_KEAHLIAN, dataUserProfile.getKeahlian());
-                            setCustomPreferences(
-                                    KEY_ALAMAT,
-                                        dataUserProfileAlamat.getJln()+" "
-                                        +dataUserProfileAlamat.getNoBangunan()+" "
-                                        +dataUserProfileAlamat.getRtrw()+" "
-                                        +dataUserProfileAlamat.getKodepos()
-                            );
-                            setCustomPreferences(KEY_KOTA, String.valueOf(dataUserProfile.getKota()));
-                            setCustomPreferences(KEY_PROPINSI, String.valueOf(dataUserProfile.getProvinsi()));
-                            setCustomPreferences(KEY_LINKWEB, dataUserProfile.getLinkWebsite());
-                            setCustomPreferences(KEY_MEDSOS_LINKEDIN, dataUserProfile.getMedsosLinkedin());
-                            setCustomPreferences(KEY_MEDSOS_FB, dataUserProfile.getMedsosFb());
-                            setCustomPreferences(KEY_MEDSOS_TWITTER, dataUserProfile.getMedsosTwitter());
-                            setCustomPreferences(KEY_MEDSOS_GOOGLEPLUS, dataUserProfile.getMedsosGoogleplus());
-                            setCustomPreferences(KEY_MEDSOS_IG, dataUserProfile.getMedsosIg());
-                            setCustomPreferences(KEY_DESCRIPTION, dataUserProfile.getDescription());
+                            setCustomPreferences(KEY_PHONENUMBER, dataUserProfile.getPhoneNumber()!=null?dataUserProfile.getPhoneNumber():"");
+                            setCustomPreferences(KEY_FOTOPROFILE, dataUserProfile.getFotoProfil()!=null?dataUserProfile.getFotoProfil():"");
+                            setCustomPreferences(KEY_JABATAN, dataUserProfile.getJabatan()!=null?dataUserProfile.getJabatan():"");
+                            setCustomPreferences(KEY_KEAHLIAN, dataUserProfile.getKeahlian()!=null?dataUserProfile.getKeahlian():"");
+//                            setCustomPreferences(
+//                                    KEY_ALAMAT,
+//                                        dataUserProfileAlamat.getJln()!=null?dataUserProfileAlamat.getJln():""+" "
+//                                        +dataUserProfileAlamat.getNoBangunan()!=null?dataUserProfileAlamat.getNoBangunan():""+" "
+//                                        +dataUserProfileAlamat.getRtrw()!=null?dataUserProfileAlamat.getRtrw():""+" "
+//                                        +dataUserProfileAlamat.getKodepos()!=null?dataUserProfileAlamat.getKodepos():""
+//                            );
+                            setCustomPreferences(KEY_KOTA, String.valueOf(dataUserProfile.getKota()!=null?dataUserProfile.getKota():""));
+                            setCustomPreferences(KEY_PROPINSI, String.valueOf(dataUserProfile.getProvinsi()!=null?dataUserProfile.getProvinsi():""));
+                            setCustomPreferences(KEY_LINKWEB, dataUserProfile.getLinkWebsite()!=null?dataUserProfile.getLinkWebsite():"");
+                            setCustomPreferences(KEY_MEDSOS_LINKEDIN, dataUserProfile.getMedsosLinkedin()!=null?dataUserProfile.getMedsosLinkedin():"");
+                            setCustomPreferences(KEY_MEDSOS_FB, dataUserProfile.getMedsosFb()!=null?dataUserProfile.getMedsosFb():"");
+                            setCustomPreferences(KEY_MEDSOS_TWITTER, dataUserProfile.getMedsosTwitter()!=null?dataUserProfile.getMedsosTwitter():"");
+                            setCustomPreferences(KEY_MEDSOS_GOOGLEPLUS, dataUserProfile.getMedsosGoogleplus()!=null?dataUserProfile.getMedsosGoogleplus():"");
+                            setCustomPreferences(KEY_MEDSOS_IG, dataUserProfile.getMedsosIg()!=null?dataUserProfile.getMedsosIg():"");
+                            setCustomPreferences(KEY_DESCRIPTION, dataUserProfile.getDescription()!=null?dataUserProfile.getDescription():"");
                         }
                     }
                 }
@@ -237,7 +254,7 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
         }
     }
     public String getCustomPreferences(String key){
-        return session.getCustomParams(key, "nothing");
+        return session.getCustomParams(key, "");
     }
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -268,15 +285,29 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
     }
 
     class getAccesToken extends AsyncTask<Call, Void, AccessToken>{
-//        Dialog dialog;
-        /*load dimulai*/
+//        ProgressDialog progressDialog;
+//
 //        @Override
 //        protected void onPreExecute() {
 //            super.onPreExecute();
-//            dialog = new Dialog(getApplicationContext());
-//            dialog.setCancelable(false);
-//            dialog.setTitle("Mendapatkan Token");
-//            dialog.show();
+//            progressDialog = new ProgressDialog(getContexts());
+//            progressDialog.setCancelable(false);
+//            progressDialog.setTitle("LOGIN IN");
+//            progressDialog.setCanceledOnTouchOutside(false);
+//            progressDialog.setCancelable(false);
+//            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//            progressDialog.show();
+//        }
+////        Dialog dialog;
+//        /*load dimulai*/
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            Dialog sDialog = new Dialog(getContext());
+//            sDialog.setCancelable(false);
+//            sDialog.setTitle("Mendapatkan Token");
+//            dialog = sDialog.create();
+//            sDialog.show();
 //        }
 
         /*load dilakukan*/
@@ -307,24 +338,9 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
                 setAccessToken(requestToken.getToken());
             }
 //            dialog.dismiss();
+//            progressDialog.dismiss();
         }
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-////        http://localhost/login/callback?token=OFnGtZEsyIdZXzrQp2HxELIVeUpVVwRun03e1QdbLiBXOqWBEeJOnthsQDSlSMrzi6NYiKZa20I9Amx7Isd0JwsWHuyBnJGLRsjaWJeQ1t7JffMqDaGXJAFlRFXmII7D&next=intent%253A%252F%252Flogin%253Fcode%253D%257BCODE%257D&withmail=
-//        if (getIntent().getData() != null){
-//            Uri uri = getIntent().getData();
-//            if (uri != null) {
-//                showLog("usertoken", getIntent().getData().toString());
-//                String code = uri.getQueryParameter("token");
-//                if (code != null) {
-//                    setSession(code);
-//                } else if (uri.getQueryParameter("error") != null) {
-//                    showToast("Terjadi Error, Silakan Login kembali");
-//                }
-//            }
-//        }
-//    }
+
 
 }

@@ -44,7 +44,7 @@
                     android:id="@+id/titleToolbar"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:text="Title Toolbar"
+                    android:text=""
                     android:layout_width="match_parent"
                     android:layout_height="35dp" />
             </LinearLayout>

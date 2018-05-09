@@ -119,31 +119,19 @@ public class MenuActivity extends BaseApps implements ClickListener {
     public void login(){
         Intent i = new Intent(this, Login.class);
         startActivity(i);
-//        if (!isLoggedIn()){
-//            String url = MDIRECT_LOGIN_URL+"?appid="+APP_ID+"&next="+REDIRECT_URI_MENU;
-//            showLog("usertoken", url);
-//            Intent intent = new Intent(
-//                    Intent.ACTION_VIEW,
-//                    Uri.parse(url));
-//            startActivityForResult(intent, 01);
-//        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        http://localhost/login/callback?token=OFnGtZEsyIdZXzrQp2HxELIVeUpVVwRun03e1QdbLiBXOqWBEeJOnthsQDSlSMrzi6NYiKZa20I9Amx7Isd0JwsWHuyBnJGLRsjaWJeQ1t7JffMqDaGXJAFlRFXmII7D&next=intent%253A%252F%252Flogin%253Fcode%253D%257BCODE%257D&withmail=
-        if (getIntent().getData() != null){
-            Uri uri = getIntent().getData();
-            if (uri != null) {
-                String code = uri.getQueryParameter("token");
-                if (code != null) {
-                    setSession(code);
-                } else if (uri.getQueryParameter("error") != null) {
-                    showToast("Terjadi Error, Silakan Login kembali");
-                }
-            }
-        }
+        initFeature();
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initFeature();
     }
 
     @OnClick(R.id.imgClose)
@@ -166,11 +154,13 @@ public class MenuActivity extends BaseApps implements ClickListener {
     }
     @OnClick(R.id.rlProfil)
     public void clickProfil(){
-
+        Intent i = new Intent(MenuActivity.this, ProfileActivity.class);
+        startActivity(i);
     }
     @OnClick(R.id.txtKeluar)
     public void clickKeluar(){
         Boolean keluar = logout();
+        finish();
         showLog("usertoken", String.valueOf(keluar));
         if (keluar){
             finished();
