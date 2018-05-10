@@ -27,6 +27,9 @@
                 <!--android:scheme="http" />-->
             </intent-filter>
         </activity>
+        <activity android:name=".PermissionPage"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.DetailNews"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
@@ -62,6 +65,10 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activity.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.UpdateProfile"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
         </activity>

@@ -1,5 +1,6 @@
 package com.mdirect.mnews.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,7 +63,8 @@ public class ProfileActivity extends BaseApps {
 
     @OnClick(R.id.updateProfile)
     public void updateProfile(){
-        showToast("Update Profile");
+        Intent i  = new Intent(this, UpdateProfile.class);
+        startActivity(i);
     }
 
     @OnClick(R.id.back)

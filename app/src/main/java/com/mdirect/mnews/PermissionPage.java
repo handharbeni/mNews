@@ -12,7 +12,7 @@ public class PermissionPage extends BaseApps{
 
     ImageView help;
     TextView value_internet;
-//    TextView value_storage;
+    TextView value_storage;
 //    TextView value_location;
     TextView value_network;
 //    TextView value_call;
@@ -25,7 +25,7 @@ public class PermissionPage extends BaseApps{
 
 //        help            = findViewById(R.id.help);
         value_internet  = findViewById(R.id.value_internet);
-//        value_storage   = findViewById(R.id.value_storage);
+        value_storage   = findViewById(R.id.value_storage);
 //        value_location  = findViewById(R.id.value_location);
         value_network   = findViewById(R.id.value_network);
 //        value_call      = findViewById(R.id.value_call);
@@ -43,6 +43,14 @@ public class PermissionPage extends BaseApps{
             }else{
                 value_internet.setText(getResources().getString(R.string.value_enable));
                 value_internet.setTextColor(getResources().getColor(R.color.colorEnable));
+            }
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                value_storage.setText(getResources().getString(R.string.value_disable));
+                value_storage.setTextColor(getResources().getColor(R.color.colorDisable));
+            }else{
+                value_storage.setText(getResources().getString(R.string.value_enable));
+                value_storage.setTextColor(getResources().getColor(R.color.colorEnable));
             }
 //            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 //                value_storage.setText(getResources().getString(R.string.value_disable));
@@ -95,16 +103,17 @@ public class PermissionPage extends BaseApps{
                 }
             }
         });
-//        value_storage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (android.os.Build.VERSION.SDK_INT >= 23) {
-//                    if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-//                    }
-//                }
-//            }
-//        });
+        value_storage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (android.os.Build.VERSION.SDK_INT >= 23) {
+                    if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+                    }
+                }
+            }
+        });
 //        value_location.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -160,13 +169,13 @@ public class PermissionPage extends BaseApps{
                 }
                 break;
             case 2:
-//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    value_storage.setText(getResources().getString(R.string.value_enable));
-//                    value_storage.setTextColor(getResources().getColor(R.color.colorEnable));
-//                } else {
-//                    value_storage.setText(getResources().getString(R.string.value_disable));
-//                    value_storage.setTextColor(getResources().getColor(R.color.colorDisable));
-//                }
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    value_storage.setText(getResources().getString(R.string.value_enable));
+                    value_storage.setTextColor(getResources().getColor(R.color.colorEnable));
+                } else {
+                    value_storage.setText(getResources().getString(R.string.value_disable));
+                    value_storage.setTextColor(getResources().getColor(R.color.colorDisable));
+                }
                 break;
             case 3:
 //                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -213,9 +222,9 @@ public class PermissionPage extends BaseApps{
             if (checkSelfPermission(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
                 all_premission++;
             }
-//            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-//                all_premission++;
-//            }
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                all_premission++;
+            }
 //            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 //                all_premission++;
 //            }

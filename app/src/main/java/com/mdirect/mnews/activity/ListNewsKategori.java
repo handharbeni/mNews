@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.mdirect.mnews.BaseApps;
 import com.mdirect.mnews.R;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import illiyin.mhandharbeni.databasemodule.generator.ServiceGenerator;
 import illiyin.mhandharbeni.databasemodule.model.mnews.AdapterRequest;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.ResponseGetAllPost;
@@ -37,6 +40,9 @@ import static android.content.ContentValues.TAG;
 public class ListNewsKategori extends BaseApps implements ClickListener {
     @BindView(R.id.rvListNews)
     RecyclerView rvListNews;
+
+    @BindView(R.id.imgClose)
+    ImageView imgClose;
 
     private String slug_kategori = "nothing";
     public static String KEY_SLUG = "key_slug";
@@ -67,6 +73,8 @@ public class ListNewsKategori extends BaseApps implements ClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_list_news);
 
+        ButterKnife.bind(this);
+
         initBundle();
         initModule();
 
@@ -76,6 +84,8 @@ public class ListNewsKategori extends BaseApps implements ClickListener {
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null)
             slug_kategori = bundle.getString(KEY_SLUG);
+
+        showLog("slug_kategori", getIds());
     }
 
     @Override
@@ -89,11 +99,13 @@ public class ListNewsKategori extends BaseApps implements ClickListener {
     }
 
     private void initDataLocal(){
-        if (!slug_kategori.equalsIgnoreCase("nothing")){
+        showLog("slug_kategori initDataLocal", getIds());
+        if (!getIds().equalsIgnoreCase("nothing")){
             /*do fill data*/
             RealmResults results = null;
             if (getIds() != null){
-                results = crudNews.read("kategoriName", getIds());
+                results = crudNews.read("kategoriSlug", getIds());
+                showLog("slug_kategori CountResult", String.valueOf(results.size()));
             }
             listNews = new ArrayList<>();
             if (results != null && results.size() > 0){
@@ -302,5 +314,10 @@ public class ListNewsKategori extends BaseApps implements ClickListener {
         protected void onPostExecute(ResponseGetPostKategori stringResponse) {
             super.onPostExecute(stringResponse);
         }
+    }
+
+    @OnClick(R.id.imgClose)
+    public void doClose(){
+        finish();
     }
 }
