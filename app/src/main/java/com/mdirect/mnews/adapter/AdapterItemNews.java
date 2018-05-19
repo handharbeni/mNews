@@ -82,4 +82,10 @@ public class AdapterItemNews extends RecyclerView.Adapter<AdapterItemNews.ViewHo
         listNews.add(newData);
         notifyDataSetChanged();
     }
+    public void updateData(ArrayList<DataGetAllPost> newData){
+        listNews.clear();
+        listNews = new ArrayList<>();
+        listNews.addAll(newData);
+        notifyDataSetChanged();
+    }
 }

@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.ImageView;
@@ -17,8 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper;
+import com.mdirect.mnews.activity.DetailNews;
 import com.mdirect.mnews.activity.MenuActivity;
+import com.mdirect.mnews.adapter.AdapterItemNews;
 import com.mdirect.mnews.adapter.TabsPagerAdapter;
+import com.mdirect.mnews.utils.ClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_all_post.DataGetAllPost;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.DataMenus;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import io.realm.RealmChangeListener;
@@ -107,6 +113,7 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
                     hiddenSearch();
                 }else{
                     /*search*/
+                    tabMainSearch.updateSearch(s.toString());
                     hiddenTab();
                 }
             }
@@ -146,6 +153,16 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
         searchStub.setVisibility(View.VISIBLE);
         mainStub.setVisibility(View.GONE);
     }
+    private void resumeActivity(){
+        if (!etSearch.getText().toString().isEmpty()){
+            hiddenTab();
+            showLog("Result Search", "Is Not Empty");
+            /*tab main search*/
+            tabMainSearch.updateSearch(etSearch.getText().toString());
+        }else{
+            hiddenSearch();
+        }
+    }
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
 
@@ -161,7 +178,18 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
 
     }
 
-    class TabMainSearch{
+    class TabMainSearch implements ClickListener{
+        private Crud crudNews;
+        private DataGetAllPost dataGetAllPost;
+
+        private AdapterItemNews adapterItemNews;
+        private ArrayList<DataGetAllPost> listNews;
+        private LinearLayoutManager llm;
+
+        @Nullable
+        @BindView(R.id.txtKeteranganSearch)
+        TextView txtKeteranganSearch;
+
         @Nullable
         @BindView(R.id.rvSearch)
         RecyclerView rvSearch;
@@ -177,6 +205,20 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
         public TabMainSearch(Context context, View view){
             this.context = context;
             unbinder = ButterKnife.bind(this, view);
+            initModuleSearch();
+        }
+
+        private void initModuleSearch(){
+            dataGetAllPost = new DataGetAllPost();
+            crudNews = new Crud(context, dataGetAllPost);
+
+            listNews = new ArrayList<>();
+
+
+            adapterItemNews = new AdapterItemNews(context, listNews, this);
+            llm = new LinearLayoutManager(context);
+            rvSearch.setLayoutManager(llm);
+            rvSearch.setAdapter(adapterItemNews);
         }
 
         public void destroyBind(){
@@ -186,6 +228,42 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
             }
         }
 
+        public void updateSearch(String message){
+            RealmResults results = crudNews.contains("slugId", message);
+            showLog("Result Search", results.size());
+            if (results.size() > 0){
+                listNews.clear();
+                rvSearch.setVisibility(View.VISIBLE);
+                ketNull.setVisibility(View.GONE);
+                for (int i = 0; i < results.size(); i++) {
+                    DataGetAllPost newData = (DataGetAllPost) results.get(i);
+                    listNews.add(newData);
+                    showLog("Result Search : i ", i);
+                }
+                showLog("Result Search : count list", listNews.size());
+                adapterItemNews.updateData(listNews);
+                adapterItemNews.notifyDataSetChanged();
+            }else{
+                rvSearch.setVisibility(View.GONE);
+                ketNull.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+        @Override
+        public void clicked(int id) {
+
+        }
+
+        @Override
+        public void clicked(String id) {
+            Bundle bundle = new Bundle();
+            bundle.putString(DetailNews.KEY_SLUGID, id);
+
+            Intent i = new Intent(context, DetailNews.class);
+            i.putExtras(bundle);
+            context.startActivity(i);
+        }
     }
 
     class TabMainView{
@@ -211,8 +289,12 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
         public void initParameter(){
             listItem = new ArrayList<>();
             showLog(KEY_POSITION, getCustomPreferences(KEY_POSITION));
-            currentPosition = !getCustomPreferences(KEY_POSITION).equalsIgnoreCase("nothing") ?
-                    Integer.valueOf(getCustomPreferences(KEY_POSITION))-1:currentPosition;
+            try {
+                currentPosition = !getCustomPreferences(KEY_POSITION).equalsIgnoreCase("nothing") ?
+                        Integer.valueOf(getCustomPreferences(KEY_POSITION))-1:currentPosition;
+            }catch (NumberFormatException e){
+                currentPosition = 0;
+            }
         }
 
         public void initData(){
@@ -286,5 +368,17 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
                 unbinder = null;
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resumeActivity();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        resumeActivity();
     }
 }

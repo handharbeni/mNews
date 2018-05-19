@@ -13,10 +13,12 @@
         android:id="@+id/ketNull"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <TextView
-            android:gravity="center"
-            android:text="Data Tidak Ditemukan"
+            android:id="@+id/txtKeteranganSearch"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Data Tidak Ditemukan" />
     </RelativeLayout>
 </RelativeLayout>

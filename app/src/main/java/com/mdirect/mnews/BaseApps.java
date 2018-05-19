@@ -272,6 +272,9 @@ public class BaseApps extends AppCompatActivity implements SessionListener {
     public void showLog(String tag, String message){
         Log.d(tag, "showLog: "+message);
     }
+    public void showLog(String tag, Integer message){
+        Log.d(tag, "showLog: "+message);
+    }
     public void writeLog(Throwable throwable){
         FirebaseCrash.report(throwable);
     }
