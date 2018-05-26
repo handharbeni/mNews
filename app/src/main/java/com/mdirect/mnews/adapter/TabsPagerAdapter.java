@@ -4,13 +4,11 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.ViewGroup;
 
-import com.mdirect.mnews.MainActivity;
 import com.mdirect.mnews.fragment.FragmentItemNews;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import illiyin.mhandharbeni.sessionlibrary.Session;
@@ -22,15 +20,14 @@ import illiyin.mhandharbeni.sessionlibrary.SessionListener;
 
 public class TabsPagerAdapter extends FragmentStatePagerAdapter {
     private Context ctx;
-    private List<String> data;
-    private Fragment[] fragments;
+    private List<Fragment> fragments = new ArrayList<>();
+    private List<String> tabTitles = new ArrayList<>();
+
     private Session session;
 
-    public TabsPagerAdapter(Context ctx, FragmentManager fm, List<String> data) {
+    public TabsPagerAdapter(Context ctx, FragmentManager fm) {
         super(fm);
         this.ctx = ctx;
-        this.data = data;
-        fragments = new Fragment[data.size()];
         session = new Session(this.ctx, new SessionListener() {
             @Override
             public void sessionChange() {
@@ -41,38 +38,24 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = null;
-        String id = data.get(position);
-
-        FragmentItemNews dinamisFragment = new FragmentItemNews();
-        dinamisFragment.setIds(id);
-        fragment = dinamisFragment;
-
-        session.setCustomParams(MainActivity.KEY_POSITION, 0);
-        if (fragments[position] == null) {
-            session.setCustomParams(MainActivity.KEY_POSITION, position);
-            fragments[position] = fragment;
-        }
-        return fragments[position];
+        return  fragments.get(position);
     }
 
     @Override
     public int getCount() {
-        if (data != null) {
-            return data.size();
-        } else {
-            return 0;
-        }
+        return fragments.size();
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return data.get(position);
+        return tabTitles.get(position);
     }
 
-    @Override
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
+    public void initFragment(ArrayList<String> dataMenu){
+        for (String s : dataMenu){
+            fragments.add(new FragmentItemNews().newInstance(s));
+            tabTitles.add(s);
+        }
     }
 }

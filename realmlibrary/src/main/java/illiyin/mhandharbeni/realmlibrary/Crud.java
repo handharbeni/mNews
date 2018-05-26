@@ -47,7 +47,6 @@ public class Crud {
         crudRealm.create(realmObject);
     }
     public RealmResults read(){
-
         return crudRealm.read();
     }
     public RealmResults read(String key, String value){

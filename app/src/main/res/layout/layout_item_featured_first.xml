@@ -10,6 +10,7 @@
     android:layout_margin="@dimen/sepuluh_dp">
 
     <ImageView
+        android:id="@+id/imageCover"
         android:src="@drawable/group_10"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

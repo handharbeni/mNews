@@ -94,6 +94,7 @@ public class AdapterRequest {
                 });
     }
     public boolean syncMenus(Boolean isTrue){
+        Log.d(TAG, "syncMenus: Loaded");
         mnewsServices.getMenus()
                 .subscribeOn(Schedulers.trampoline())
                 .observeOn(Schedulers.newThread())
@@ -111,10 +112,31 @@ public class AdapterRequest {
 
                     @Override
                     public void onNext(ResponseGetMenus responseGetMenus) {
+                        DataMenus dataMenus = new DataMenus();
+                        Crud crudRealmMenus = new Crud(context, dataMenus);
+                        List<DataMenus> data = responseGetMenus.getData();
+//                        DataMenus menuKanal = new DataMenus();
+//                        menuKanal.setChildren(null);
+//                        menuKanal.setId(0);
+//                        menuKanal.setName("Semua Kanal");
+//                        menuKanal.setSlug("semua-kanal");
+//                        Boolean duplicateKanal = crudRealmMenus.checkDuplicate("id", menuKanal.getId());
+//                        if (duplicateKanal){
+//                            /*semua kanal duplikat*/
+//                            Log.d(TAG, "onNext: Semua Kanal Update");
+//                            crudRealmMenus.openObject();
+//                            crudRealmMenus.getRealmObject("id", menuKanal.getId());
+//                            crudRealmMenus.update(menuKanal);
+//                            crudRealmMenus.commitObject();
+//                        }else{
+//                            /*tidak ada duplikat kanal*/
+//                            crudRealmMenus.create(menuKanal);
+//                            Log.d(TAG, "onNext: Semua Kanal Baru");
+//                        }
+
                         if (responseGetMenus.getSuccess()){
-                            DataMenus dataMenus = new DataMenus();
-                            Crud crudRealmMenus = new Crud(context, dataMenus);
-                            List<DataMenus> data = responseGetMenus.getData();
+
+
                             if (data.size() > 0){
                                 int j = 0;
                                 for (DataMenus dMenus:data){
@@ -237,24 +259,24 @@ public class AdapterRequest {
 
                     @Override
                     public void onNext(ResponseFeaturedPost responseFeaturedPost) {
-//                        Log.d(TAG, "onNext: Insert New :"+responseFeaturedPost.getSuccess());
-//                        if (responseFeaturedPost.getSuccess()){
-//                            DataFeaturedPost data = (DataFeaturedPost) responseFeaturedPost.getData();
-//                            if (data != null){
-//                                DataFeaturedPost dataFeaturedPost = new DataFeaturedPost();
-//                                Crud crudFeaturedPost = new Crud(context, dataFeaturedPost);
-//                                crudFeaturedPost.openObject();
-//                                crudFeaturedPost.deleteAll(DataFeaturedPost.class);
-//                                crudFeaturedPost.commitObject();
-//                                    /*delete all data featured*/
-//                                    /*create new*/
-//                                Log.d(TAG, "onNext: Insert New :"+data.getId());
-//                                crudFeaturedPost.create(data);
-//                                syncProperties(data.getId(), data.getProperties());
-//                                crudFeaturedPost.closeRealm();
-//                            }
-//
-//                        }
+                        Log.d(TAG, "onNext: Insert New :"+responseFeaturedPost.getSuccess());
+                        if (responseFeaturedPost.getSuccess()){
+                            DataFeaturedPost data = (DataFeaturedPost) responseFeaturedPost.getData();
+                            if (data != null){
+                                DataFeaturedPost dataFeaturedPost = new DataFeaturedPost();
+                                Crud crudFeaturedPost = new Crud(context, dataFeaturedPost);
+                                crudFeaturedPost.openObject();
+                                crudFeaturedPost.deleteAll(DataFeaturedPost.class);
+                                crudFeaturedPost.commitObject();
+                                    /*delete all data featured*/
+                                    /*create new*/
+                                Log.d(TAG, "onNext: Insert New :"+data.getId());
+                                crudFeaturedPost.create(data);
+                                syncProperties(data.getId(), data.getProperties());
+                                crudFeaturedPost.closeRealm();
+                            }
+
+                        }
                     }
                 });
 
@@ -276,25 +298,23 @@ public class AdapterRequest {
 
                     @Override
                     public void onNext(ResponseFeaturedPost responseFeaturedPost) {
-//                        Log.d(TAG, "onNext: Insert New :"+responseFeaturedPost.getSuccess());
-//                        if (responseFeaturedPost.getSuccess()){
-//                            JSONObject jsonObject = responseFeaturedPost.getData();
-//                            DataFeaturedPost data = (DataFeaturedPost) responseFeaturedPost.getData();
-//                            if (data != null){
-//                                DataFeaturedPost dataFeaturedPost = new DataFeaturedPost();
-//                                Crud crudFeaturedPost = new Crud(context, dataFeaturedPost);
-//                                crudFeaturedPost.openObject();
-//                                crudFeaturedPost.deleteAll(DataFeaturedPost.class);
-//                                crudFeaturedPost.commitObject();
-//                                    /*delete all data featured*/
-//                                    /*create new*/
-//                                Log.d(TAG, "onNext: Insert New :"+data.getId());
-//                                crudFeaturedPost.create(data);
-//                                syncProperties(data.getId(), data.getProperties());
-//                                crudFeaturedPost.closeRealm();
-//                            }
-//
-//                        }
+                        if (responseFeaturedPost.getSuccess()){
+                            DataFeaturedPost data = responseFeaturedPost.getData();
+                            if (data != null){
+                                DataFeaturedPost dataFeaturedPost = new DataFeaturedPost();
+                                Crud crudFeaturedPost = new Crud(context, dataFeaturedPost);
+                                crudFeaturedPost.openObject();
+                                crudFeaturedPost.deleteAll(DataFeaturedPost.class);
+                                crudFeaturedPost.commitObject();
+                                    /*delete all data featured*/
+                                    /*create new*/
+                                Log.d(TAG, "onNext: Insert New :"+data.getId());
+                                crudFeaturedPost.create(data);
+                                syncProperties(data.getId(), data.getProperties());
+                                crudFeaturedPost.closeRealm();
+                            }
+
+                        }
                     }
                 });
         return true;

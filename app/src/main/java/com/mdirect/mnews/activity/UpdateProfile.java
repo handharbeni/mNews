@@ -275,7 +275,7 @@ public class UpdateProfile extends BaseApps implements ProgressRequestBody.Uploa
         call.enqueue(new Callback() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
-                showLog("UPLOAD IMAGE", response.body().toString());
+//                showLog("UPLOAD IMAGE", response.body().toString());
                 onFinish();
             }
 

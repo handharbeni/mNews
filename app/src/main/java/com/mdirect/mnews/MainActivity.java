@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.ImageView;
@@ -26,7 +25,6 @@ import com.mdirect.mnews.adapter.TabsPagerAdapter;
 import com.mdirect.mnews.utils.ClickListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,11 +33,10 @@ import butterknife.Unbinder;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_all_post.DataGetAllPost;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.DataMenus;
 import illiyin.mhandharbeni.realmlibrary.Crud;
-import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 
-public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedListener {
+public class MainActivity extends BaseApps{
     private static final String TAG = "MainActivity";
 
     public static final String KEY_POSITION = "key_position";
@@ -135,8 +132,8 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
         }
         tabMainView = new TabMainView(this, vTab);
         tabMainView.initParameter();
-        tabMainView.initData();
         tabMainView.setViewPager();
+//        tabMainView.initData();
     }
     private void initViewSearch(){
         if (searchStub.getParent() != null){
@@ -162,20 +159,6 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
         }else{
             hiddenSearch();
         }
-    }
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     class TabMainSearch implements ClickListener{
@@ -267,7 +250,7 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
     }
 
     class TabMainView{
-        private List<String> listItem;
+        private ArrayList<String> listItem;
         private TabsPagerAdapter tabsPagerAdapter;
 
         @Nullable
@@ -299,30 +282,51 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
 
         public void initData(){
             listItem.clear();
+//            listItem.add("Semua Kanal");
+//            RealmResults results = crudMenus.read();
+//            for (int i=0;i<results.size();i++){
+//                DataMenus dataMenus = (DataMenus) results.get(i);
+//                listItem.add(dataMenus.getName());
+//            }
+//            results.addChangeListener(new RealmChangeListener<RealmResults>() {
+//                @Override
+//                public void onChange(RealmResults realmResults) {
+//                    listItem.clear();
+//                    listItem.add("Semua Kanal");
+//                    for (int i=0;i<realmResults.size();i++){
+//                        DataMenus dataMenus = (DataMenus) realmResults.get(i);
+//                        listItem.add(dataMenus.getName());
+//                    }
+//                    setViewPagerUpdate();
+//                    tabsPagerAdapter.notifyDataSetChanged();
+//                }
+//            });
+//            tabsPagerAdapter.addFragment(new FragmentItemNews().newInstance("Semua Kanal"), "Semua Kanal");
             listItem.add("Semua Kanal");
             RealmResults results = crudMenus.read();
-            for (int i=0;i<results.size();i++){
-                DataMenus dataMenus = (DataMenus) results.get(i);
-                listItem.add(dataMenus.getName());
-            }
-            results.addChangeListener(new RealmChangeListener<RealmResults>() {
-                @Override
-                public void onChange(RealmResults realmResults) {
-                    listItem.clear();
-                    listItem.add("Semua Kanal");
-                    for (int i=0;i<realmResults.size();i++){
-                        DataMenus dataMenus = (DataMenus) realmResults.get(i);
-                        listItem.add(dataMenus.getName());
-                    }
-                    setViewPagerUpdate();
-                    tabsPagerAdapter.notifyDataSetChanged();
+            if (results.size() > 0){
+                for (int i = 0; i<results.size(); i++){
+                    DataMenus dataMenus = (DataMenus) results.get(i);
+                    assert dataMenus != null;
+//                    tabsPagerAdapter.addFragment(new FragmentItemNews().newInstance(dataMenus.getName()), dataMenus.getName());
+                    listItem.add(dataMenus.getName());
                 }
-            });
+            }
+            tabsPagerAdapter.initFragment(listItem);
+
         }
         public void setViewPager(){
             if (tabLayout != null && pager != null){
-                tabsPagerAdapter = new TabsPagerAdapter(this.context, getSupportFragmentManager(), listItem);
+                RealmResults countMenu = crudMenus.read();
+
+                tabsPagerAdapter = new TabsPagerAdapter(this.context, getSupportFragmentManager());
+
+                initData();
+//                tabsPagerAdapter.notifyDataSetChanged();
+
+                pager.setOffscreenPageLimit(countMenu.size());
                 pager.setAdapter(tabsPagerAdapter);
+
 
                 TabLayoutHelper mTabLayoutHelper = new TabLayoutHelper(tabLayout, pager);
                 mTabLayoutHelper.setAutoAdjustTabModeEnabled(false);
@@ -331,13 +335,13 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
                 tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.tagline_active));
                 setDividerTabLayout();
 
-                pager.setCurrentItem(currentPosition);
-                pager.setActivated(true);
+//                pager.setCurrentItem(currentPosition);
+//                pager.setActivated(true);
             }
         }
         public void setViewPagerUpdate(){
             if (tabLayout != null && pager != null){
-                tabsPagerAdapter = new TabsPagerAdapter(this.context, getSupportFragmentManager(), listItem);
+                tabsPagerAdapter = new TabsPagerAdapter(this.context, getSupportFragmentManager());
                 pager.setAdapter(tabsPagerAdapter);
 
                 TabLayoutHelper mTabLayoutHelper = new TabLayoutHelper(tabLayout, pager);
@@ -347,8 +351,8 @@ public class MainActivity extends BaseApps implements TabLayout.OnTabSelectedLis
                 tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.tagline_active));
                 setDividerTabLayout();
 
-                pager.setCurrentItem(currentPosition);
-                pager.setActivated(true);
+//                pager.setCurrentItem(currentPosition);
+//                pager.setActivated(true);
             }
         }
 

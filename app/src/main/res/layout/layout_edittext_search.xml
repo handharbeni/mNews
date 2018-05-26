@@ -27,6 +27,7 @@
             app:srcCompat="@drawable/ic_search" />
 
         <EditText
+            android:singleLine="true"
             android:textSize="15sp"
             android:textColorHint="@color/search_box_hint"
             android:textColor="@color/search_box"

@@ -59,27 +59,28 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
     <!--<include layout="@layout/layout_main_content" />-->
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:fillViewport="true"
         android:layout_width="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <ViewStub
-                android:inflatedId="@+id/mainStub"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/mainStub"
-                android:layout="@layout/layout_tab_main"/>
-            <ViewStub
-                android:inflatedId="@+id/searchStub"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/searchStub"
-                android:layout="@layout/layout_tab_main_search"/>
-        </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+                android:layout_height="wrap_content">
+
+                <ViewStub
+                    android:inflatedId="@+id/mainStub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mainStub"
+                    android:layout="@layout/layout_tab_main"/>
+                <ViewStub
+                    android:inflatedId="@+id/searchStub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/searchStub"
+                    android:layout="@layout/layout_tab_main_search"/>
+            </RelativeLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

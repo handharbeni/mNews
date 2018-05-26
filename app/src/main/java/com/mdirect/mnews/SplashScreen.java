@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -14,6 +15,8 @@ import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_all_pos
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.DataMenus;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import io.realm.RealmResults;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Beni on 26/03/2018.
@@ -67,6 +70,7 @@ public class SplashScreen extends BaseApps{
     }
 
     public void initData(){
+        Log.d(TAG, "syncMenus: Init Data");
         idLoading.setText("Loading Data Menu");
         RealmResults resultsMenu = crud.read();
         if (resultsMenu.size() < 1){

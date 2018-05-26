@@ -24,7 +24,7 @@ public class ResponseFeaturedPost {
     @SerializedName(value="data")
     @Expose
     @Ignore
-    private Object data = null;
+    private DataFeaturedPost data = null;
 
     public Boolean getSuccess() {
         return success;
@@ -42,11 +42,11 @@ public class ResponseFeaturedPost {
         this.message = message;
     }
 
-    public Object getData() {
+    public DataFeaturedPost getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(DataFeaturedPost data) {
         this.data = data;
     }
 
