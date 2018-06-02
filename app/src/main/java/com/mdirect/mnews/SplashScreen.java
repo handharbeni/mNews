@@ -14,6 +14,7 @@ import illiyin.mhandharbeni.databasemodule.model.mnews.AdapterRequest;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_all_post.DataGetAllPost;
 import illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_menus.DataMenus;
 import illiyin.mhandharbeni.realmlibrary.Crud;
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static android.content.ContentValues.TAG;
@@ -59,7 +60,7 @@ public class SplashScreen extends BaseApps{
                 writeLog(e);
             }
             }
-        },5000);
+        },2000);
     }
 
     public void initModule(){
@@ -72,25 +73,46 @@ public class SplashScreen extends BaseApps{
     public void initData(){
         Log.d(TAG, "syncMenus: Init Data");
         idLoading.setText("Loading Data Menu");
-        RealmResults resultsMenu = crud.read();
-        if (resultsMenu.size() < 1){
-            /*data sudah ada*/
-            boolean returns = adapterRequest.syncMenus(true);
-            if (returns){
-                /*pindah ke mainactivity*/
+        crud.getRealm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                adapterRequest.syncMenus(true);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
                 initFeatured();
             }
-        }else{
-            initFeatured();
-        }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                initFeatured();
+            }
+        });
     }
 
     public void initFeatured(){
         idLoading.setText("Loading Featured");
-        Boolean isTrue = adapterRequest.syncFeatured(true);
-        if (isTrue){
-            initNews();
-        }
+//        Boolean isTrue =
+        crud.getRealm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                adapterRequest.syncFeatured(true);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                initNews();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                initNews();
+            }
+        });
+//        if (isTrue){
+//            initNews();
+//        }
     }
 
     public void initNews(){
@@ -98,14 +120,22 @@ public class SplashScreen extends BaseApps{
         DataGetAllPost dataGetAllPost = new DataGetAllPost();
         Crud crudNews = new Crud(getApplicationContext(), dataGetAllPost);
         RealmResults results = crudNews.read();
-        if (results.size() < 1){
-            Boolean isTrue = adapterRequest.syncPost("1", true);
-            if (isTrue){
+        crud.getRealm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                adapterRequest.syncPost("1", true);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
                 gotoMain();
             }
-        }else{
-            gotoMain();
-        }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                gotoMain();
+            }
+        });
     }
 
     private void gotoMain(){

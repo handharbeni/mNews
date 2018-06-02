@@ -1,15 +1,22 @@
 package com.mdirect.mnews.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -19,16 +26,22 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.mdirect.mnews.BaseApps;
 import com.mdirect.mnews.R;
 import com.mdirect.mnews.adapter.AdapterRelated;
 import com.mdirect.mnews.utils.ClickListener;
+import com.mdirect.mnews.utils.DateFormatter;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -77,6 +90,18 @@ public class DetailNews extends BaseApps implements ClickListener {
 
     private List<Related> listRelated;
     private AdapterRelated adapterRelated;
+    private DateFormatter dateFormatter;
+
+    private HashMap<String, String> getWidthHeight(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        HashMap<String, String> wh = new HashMap<>();
+        wh.put("height", String.valueOf(height));
+        wh.put("width", String.valueOf(width));
+        return wh;
+    }
 
 
     @Override
@@ -85,6 +110,7 @@ public class DetailNews extends BaseApps implements ClickListener {
         setContentView(R.layout.layout_main_detail_news);
         ButterKnife.bind(this);
         startSkeleton();
+        dateFormatter = new DateFormatter();
     }
 
     private void startSkeleton(){
@@ -165,6 +191,7 @@ public class DetailNews extends BaseApps implements ClickListener {
         protected void onPostExecute(final DataGetSinglePost s) {
             super.onPostExecute(s);
             new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @SuppressLint("CheckResult")
                 @Override
                 public void run() {
 
@@ -174,9 +201,33 @@ public class DetailNews extends BaseApps implements ClickListener {
 
                     title_news = single.getTitle();
                     image_news = single.getFeaturedImg();
-                    date_news = single.getDatePublished();
-
-                    Glide.with(getApplicationContext()).load(single.getFeaturedImg()).into(img_banner);
+                    date_news = dateFormatter.format(single.getDatePublished());
+                    final int[] w = { 0 };
+                    final int[] h = { 0 };
+                    Glide.with(getApplicationContext())
+                            .asBitmap()
+                            .load(single.getFeaturedImg())
+//                            .apply(options)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    w[0] = resource.getWidth();
+                                    h[0] = resource.getHeight();
+                                }
+                            });
+                    final RequestOptions options = new RequestOptions();
+                    w[0] = w[0]==0?1:w[0];
+                    int rasio = (Integer.valueOf(getWidthHeight().get("width")) / w[0]);
+                    Log.d(TAG, "run: "+rasio);
+                    Log.d(TAG, "run: "+w[0]);
+                    Log.d(TAG, "run: "+getWidthHeight().get("width"));
+                    w[0] = rasio * w[0];
+                    h[0] = rasio * h[0];
+                    options.override(w[0], h[0]);
+                    Glide.with(getApplicationContext())
+                            .load(single.getFeaturedImg())
+                            .apply(options)
+                            .into(img_banner);
                     tvTitle.setText(single.getTitle());
                     titleToolbar.setText(single.getTitle());
 //                    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
@@ -186,7 +237,7 @@ public class DetailNews extends BaseApps implements ClickListener {
 //                    Date date2 = new Date();
 //                    long difference = date2.getTime() - date1.getTime();
 
-                    tvDate.setText(single.getKategori() +"-"+ single.getCreatedAt());
+                    tvDate.setText(single.getKategori() +"-"+ dateFormatter.format(single.getCreatedAt()));
                     tvContent.setWebViewClient(new WebViewClient(){
                         @Override
                         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -299,6 +350,10 @@ public class DetailNews extends BaseApps implements ClickListener {
     }
 
     @OnClick(R.id.back)
+    public void doBack(){
+        onBackPressed();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

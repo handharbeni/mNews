@@ -2,6 +2,7 @@ package com.mdirect.mnews.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mdirect.mnews.R;
 import com.mdirect.mnews.utils.ClickListener;
+import com.mdirect.mnews.utils.DateFormatter;
 
 import java.util.ArrayList;
 
@@ -44,10 +46,17 @@ public class AdapterItemNews extends RecyclerView.Adapter<AdapterItemNews.ViewHo
     @Override
     public void onBindViewHolder(@NonNull AdapterItemNews.ViewHolder holder, int position) {
         final DataGetAllPost data = listNews.get(position);
+        DateFormatter dateFormatter = new DateFormatter();
         holder.titleNews.setText(data.getTitle());
-        holder.dateNews.setText(data.getCreatedAt());
+        holder.dateNews.setText(dateFormatter.format(data.getCreatedAt()));
         Glide.with(context).load(data.getFeaturedImg()).into(holder.imgNews);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.clicked(data.getSlugId());
+            }
+        });
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clickListener.clicked(data.getSlugId());
@@ -72,6 +81,9 @@ public class AdapterItemNews extends RecyclerView.Adapter<AdapterItemNews.ViewHo
 
         @BindView(R.id.cardView)
         CardView cardView;
+
+        @BindView(R.id.mainLayout)
+        ConstraintLayout mainLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);

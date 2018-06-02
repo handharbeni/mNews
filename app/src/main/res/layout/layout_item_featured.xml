@@ -18,7 +18,7 @@
         android:layout_height="300dp"/>
 
     <LinearLayout
-        android:gravity="center"
+        android:gravity="top"
         android:id="@+id/linearSecond"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,18 +28,19 @@
         app:layout_constraintTop_toBottomOf="@+id/first">
 
         <include
-            android:layout_gravity="center"
+
+            android:layout_gravity="center|top"
             android:id="@+id/second"
             layout="@layout/layout_item_featured_second"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <include
-            android:layout_gravity="center"
+            android:layout_gravity="center|top"
             android:id="@+id/third"
             layout="@layout/layout_item_featured_third"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>

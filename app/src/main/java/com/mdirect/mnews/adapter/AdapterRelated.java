@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mdirect.mnews.R;
 import com.mdirect.mnews.utils.ClickListener;
+import com.mdirect.mnews.utils.DateFormatter;
 
 import java.util.List;
 
@@ -28,11 +29,13 @@ public class AdapterRelated extends RecyclerView.Adapter<AdapterRelated.ViewHold
     Context context;
     List<Related> relatedList;
     private ClickListener clickListener;
+    private DateFormatter dateFormatter;
 
     public AdapterRelated(Context context, List<Related> relatedList, ClickListener clickListener) {
         this.context = context;
         this.relatedList = relatedList;
         this.clickListener = clickListener;
+        this.dateFormatter = new DateFormatter();
     }
 
     @NonNull
@@ -47,7 +50,7 @@ public class AdapterRelated extends RecyclerView.Adapter<AdapterRelated.ViewHold
         final Related related = relatedList.get(position);
         Glide.with(context).load(related.getFeaturedImg()).into(holder.imgRelated);
         holder.txtTitleRelated.setText(related.getTitle());
-        holder.txtTanggal.setText(related.getCreatedAt());
+        holder.txtTanggal.setText(dateFormatter.format(related.getCreatedAt()));
         holder.relatedView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

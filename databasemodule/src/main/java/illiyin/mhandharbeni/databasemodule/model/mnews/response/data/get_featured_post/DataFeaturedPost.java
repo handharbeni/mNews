@@ -1,5 +1,6 @@
 package illiyin.mhandharbeni.databasemodule.model.mnews.response.data.get_featured_post;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -69,7 +70,7 @@ public class DataFeaturedPost extends RealmObject {
     @SerializedName("properties")
     @Expose
     @Ignore
-    private List<Properties> properties;
+    private Properties properties;
     @SerializedName("date_published")
     @Expose
     private String datePublished;
@@ -82,7 +83,7 @@ public class DataFeaturedPost extends RealmObject {
     @SerializedName("author")
     @Expose
     @Ignore
-    private List<Author> author;
+    private Author author;
 
     public DataFeaturedPost() {
 
@@ -224,11 +225,11 @@ public class DataFeaturedPost extends RealmObject {
         this.view = view;
     }
 
-    public List<Properties> getProperties() {
+    public Properties getProperties() {
         return properties;
     }
 
-    public void setProperties(List<Properties> properties) {
+    public void setProperties(Properties properties) {
         this.properties = properties;
     }
 
@@ -256,12 +257,22 @@ public class DataFeaturedPost extends RealmObject {
         this.updatedAt = updatedAt;
     }
 
-    public List<Author> getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(List<Author> author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
+
+    public String serialize(){
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+    static public  DataFeaturedPost create(String serializedData){
+        Gson gson = new Gson();
+        return gson.fromJson(serializedData,  DataFeaturedPost.class);
+    }
 }

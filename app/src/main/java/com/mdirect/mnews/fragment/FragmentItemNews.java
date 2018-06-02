@@ -3,8 +3,8 @@ package com.mdirect.mnews.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,13 +18,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mdirect.mnews.BaseFragments;
 import com.mdirect.mnews.R;
 import com.mdirect.mnews.activity.DetailNews;
 import com.mdirect.mnews.adapter.AdapterItemNews;
 import com.mdirect.mnews.utils.ClickListener;
+import com.mdirect.mnews.utils.DateFormatter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -89,6 +92,8 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
 
     Featured cFeatured;
 
+    private String width, height;
+
     public static FragmentItemNews newInstance(String ids) {
 
         Bundle args = new Bundle();
@@ -102,6 +107,9 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
+        HashMap<String, String> widhtHeight = getWidthHeight();
+        width = widhtHeight.get("width");
+        height = widhtHeight.get("height");
         if (bundle != null){
             setIds(bundle.getString(KEY_ID));
             Log.d(TAG, "onCreate: "+getIds());
@@ -134,29 +142,26 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
         mnewsServices = ServiceGenerator.createService(MnewsServices.class);
 
         if (featured.getParent() != null){
+            Log.d(TAG, "initModule: Featured Have Parent");
             featured.setLayoutResource(R.layout.layout_item_featured);
-            cFeatured = new Featured(getActivity().getApplicationContext(), featured.inflate());
+            cFeatured = new Featured(getActivity().getApplicationContext(), featured.inflate(), this);
         }
     }
 
     private void initData(){
-//        Drawable drawable = logo.getDrawable();
-//        if (drawable instanceof Animatable) {
-//            ((Animatable) drawable).start();
-//        }
+        int i = 0;
         RealmResults results = null;
         results = crudNews.read();
         showLog(TAG, "JUMLAH DATA "+results.size());
         if (getIds() != null){
             if (getIds().equalsIgnoreCase("Semua Kanal")){
-//                featured.setLayoutResource(R.layout.layout_item_featured);
-//                featured.inflate();
-
+                i = 2;
                 getFeaturedPost();
                 featured.setVisibility(View.VISIBLE);
                 results = crudNews.read();
                 showLog(TAG, String.valueOf("Jumlah Data Kategori "+getIds()+" ADALAH "+results.size()));
             }else{
+                i = 0;
                 featured.setVisibility(View.GONE);
                 results = crudNews.read("kategoriName", getIds());
                 showLog(TAG, String.valueOf("Jumlah Data Kategori "+getIds()+" ADALAH "+results.size()));
@@ -164,10 +169,11 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
         }
         listNews = new ArrayList<>();
         if (results.size() > 0){
-            for (int i=0;i<results.size();i++){
+            do {
                 DataGetAllPost dGetAllPost = (DataGetAllPost) results.get(i);
                 listNews.add(dGetAllPost);
-            }
+                i++;
+            }while (i<results.size());
         }
 
         adapterItemNews = new AdapterItemNews(getActivity().getApplicationContext(), listNews, this);
@@ -237,16 +243,19 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
                 List<DataGetAllPost> newData = responseGetAllPost.getData();
                 if (newData.size() > 0){
                     for (final DataGetAllPost dGetAllPost:newData){
-                        RealmResults results = crudNews.read("slugId",dGetAllPost.getSlugId());
-                        if (results.size() > 0){
-                            /*update*/
-                            updateRealm(dGetAllPost);
-                        }else{
-                            /*create*/
-                            if (getIds().equalsIgnoreCase(dGetAllPost.getKategoriName())){
-                                adapterItemNews.updateData(dGetAllPost);
+                        if (crudNews != null){
+
+                            RealmResults results = crudNews.read("slugId",dGetAllPost.getSlugId());
+                            if (results.size() > 0){
+                                /*update*/
+                                updateRealm(dGetAllPost);
+                            }else{
+                                /*create*/
+                                if (getIds().equalsIgnoreCase(dGetAllPost.getKategoriName())){
+                                    adapterItemNews.updateData(dGetAllPost);
+                                }
+                                createRealm(dGetAllPost);
                             }
-                            createRealm(dGetAllPost);
                         }
                     }
 
@@ -269,8 +278,11 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
                 try {
                     DataGetAllPost post = new DataGetAllPost();
                     Crud crudNewx = new Crud(getContext(), post);
-                    crudNewx.create(dataGetAllPost);
-                    crudNewx.closeRealm();
+                    RealmResults checkDuplicate = crudNewx.read("slugId", dataGetAllPost.getSlugId());
+                    if (checkDuplicate.size() < 1){
+                        crudNewx.create(dataGetAllPost);
+                        crudNewx.closeRealm();
+                    }
                 }catch (IllegalStateException e){
 
                 }
@@ -304,7 +316,8 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
                                         crudNewx.getRealmObject("slugId", oldPost.getSlugId());
                                         crudNewx.update(dataGetAllPost);
                                         crudNewx.commitObject();
-
+//                                        realm.beginTransaction();
+//                                        realm
                                     }
                                 });
                             }catch (IllegalStateException e){
@@ -364,24 +377,23 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
     }
 
     private void getFeaturedPost(){
-        Boolean getFeatured  = adapterRequest.syncFeatured(true);
-        if (getFeatured){
+//        Boolean getFeatured  = adapterRequest.syncFeatured(true);
+//        if (getFeatured){
             cFeatured.loadFirst();
-        }
-    }
-
-    private void loadFeaturedData(){
-        RealmResults resultFeature = crudFeatured.read();
-        if (resultFeature.size() > 0){
-            DataFeaturedPost dataFeatured = (DataFeaturedPost) resultFeature.get(0);
-
-        }
+            cFeatured.loadSecond();
+            cFeatured.loadThird();
+//        }
     }
 
     class Featured{
         private Crud crudFeatured;
         private DataFeaturedPost dataFeaturedPost;
 
+        private Crud crudNews;
+        private DataGetAllPost dataGetAllPost;
+
+
+        /*first*/
         @Nullable
         @BindView(R.id.imageCover)
         ImageView imageCover;
@@ -394,30 +406,135 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
         @BindView(R.id.txtKeteranganFirst)
         TextView txtKetaranganFirst;
 
-        private Context ctx;
 
-        public Featured(Context ctx, View view) {
+
+        /*seconds*/
+        @Nullable
+        @BindView(R.id.imageSecond)
+        ImageView imageSecond;
+
+        @Nullable
+        @BindView(R.id.txtTitleSeconds)
+        TextView txtTitleSeconds;
+
+        @Nullable
+        @BindView(R.id.txtTglSeconds)
+        TextView txtTglSeconds;
+
+        @Nullable
+        @BindView(R.id.mainLayoutSecond)
+        CardView mainLayoutSecond;
+
+
+
+        /*third*/
+        @Nullable
+        @BindView(R.id.imageThird)
+        ImageView imageThird;
+
+        @Nullable
+        @BindView(R.id.txtTitleThirds)
+        TextView txtTitleThirds;
+
+        @Nullable
+        @BindView(R.id.txtTglThirds)
+        TextView txtTglThirds;
+
+        @Nullable
+        @BindView(R.id.mainLayoutThird)
+        CardView mainLayoutThird;
+
+        private Context ctx;
+        private DateFormatter dateFormatter;
+        private ClickListener clickListener;
+
+        Featured(Context ctx, View view, ClickListener clickListener) {
             this.ctx = ctx;
+
             this.dataFeaturedPost = new DataFeaturedPost();
             this.crudFeatured = new Crud(this.ctx, this.dataFeaturedPost);
 
-            ButterKnife.bind(this.ctx, view);
+            this.dataGetAllPost = new DataGetAllPost();
+            this.crudNews = new Crud(this.ctx, this.dataGetAllPost);
+
+            this.dateFormatter = new DateFormatter();
+
+            this.clickListener = clickListener;
+
+            ButterKnife.bind(this, view);
         }
 
-        public void loadFirst(){
-            showLog(TAG, "LoadFirst");
-            RealmResults results = this.crudFeatured.read();
-            showLog(TAG, String.valueOf(results.size()));
+        void loadFirst(){
+//            showLog(TAG, "LoadFirst");
+//            RealmResults results = this.crudFeatured.read();
+//            showLog(TAG, String.valueOf(results.size()));
+//            if (results.size() > 0){
+//                DataFeaturedPost dataFeaturedPost = (DataFeaturedPost) results.get(0);
+//                assert dataFeaturedPost != null;
+//                txtTitleFirst.setText(dataFeaturedPost.getTitle());
+//                txtKetaranganFirst.setText(dataFeaturedPost.getFeaturedPost());
+//                Glide.with(this.ctx).load(dataFeaturedPost.getFeaturedImg()).into(imageCover);
+//            }
+            showLog(TAG, "LoadSeconds");
+            RealmResults results = this.crudNews.read();
+            showLog(TAG, "Result Seconds Featured "+results.size());
             if (results.size() > 0){
-                DataFeaturedPost dataFeaturedPost = (DataFeaturedPost) results.get(0);
-                txtTitleFirst.setText(dataFeaturedPost.getTitle());
-                txtKetaranganFirst.setText(dataFeaturedPost.getFeaturedPost());
-                Glide.with(this.ctx).load(dataFeaturedPost.getFeaturedImg()).into(imageCover);
+                final DataGetAllPost dataGetAllPost = (DataGetAllPost) results.get(0);
+                assert dataGetAllPost != null;
+                txtTitleFirst.setText(dataGetAllPost.getTitle());
+                txtKetaranganFirst.setText(dateFormatter.format(dataGetAllPost.getCreatedAt()));
+                Glide.with(this.ctx).load(dataGetAllPost.getFeaturedImg()).into(imageCover);
+                imageCover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clickListener.clicked(dataGetAllPost.getSlugId());
+                    }
+                });
             }
         }
 
-        public void loadSecond(){
+        void loadSecond(){
+            showLog(TAG, "LoadSeconds");
+            RealmResults results = this.crudNews.read();
+            showLog(TAG, "Result Seconds Featured "+results.size());
+            if (results.size() > 0){
+                final DataGetAllPost dataGetAllPost = (DataGetAllPost) results.get(0);
+                assert dataGetAllPost != null;
+                txtTitleSeconds.setText(dataGetAllPost.getTitle());
+                txtTglSeconds.setText(dateFormatter.format(dataGetAllPost.getCreatedAt()));
+                RequestOptions options = new RequestOptions();
+                options.override((Integer.valueOf(width)-10)/2);
+                Glide.with(this.ctx).load(dataGetAllPost.getFeaturedImg()).apply(options).into(imageSecond);
+                assert mainLayoutSecond != null;
+                imageSecond.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clickListener.clicked(dataGetAllPost.getSlugId());
+                    }
+                });
+            }
+        }
 
+        void loadThird(){
+            showLog(TAG, "LoadThird");
+            RealmResults results = this.crudNews.read();
+            showLog(TAG, "Result Third Featured "+results.size());
+            if (results.size() > 0){
+                final DataGetAllPost dataGetAllPost = (DataGetAllPost) results.get(1);
+                assert dataGetAllPost != null;
+                txtTitleThirds.setText(dataGetAllPost.getTitle());
+                txtTglThirds.setText(dateFormatter.format(dataGetAllPost.getCreatedAt()));
+                RequestOptions options = new RequestOptions();
+                options.override((Integer.valueOf(width)-10)/2);
+                Glide.with(this.ctx).load(dataGetAllPost.getFeaturedImg()).apply(options).into(imageThird);
+                assert mainLayoutThird != null;
+                imageThird.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clickListener.clicked(dataGetAllPost.getSlugId());
+                    }
+                });
+            }
         }
     }
 

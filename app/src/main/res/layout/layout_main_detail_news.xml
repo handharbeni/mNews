@@ -16,10 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
+        <!--?attr/actionBarSize-->
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="@color/headline_caption"
             android:gravity="center"
             app:contentInsetEnd="0dp"
@@ -45,8 +46,9 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
                     android:text=""
+                    android:minHeight="35dp"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -67,12 +69,12 @@
 
 
             <ImageView
-                android:scaleType="fitXY"
                 android:src="@drawable/group_10"
                 android:layout_margin="@dimen/sepuluh_dp"
                 android:id="@+id/detail_img_banner"
                 android:layout_width="0dp"
-                android:layout_height="160dp"
+                android:layout_height="300dp"
+                android:minHeight="210.94px"
                 android:background="@drawable/drawable_rounded_grey"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
