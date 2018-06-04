@@ -194,85 +194,81 @@ public class DetailNews extends BaseApps implements ClickListener {
                 @SuppressLint("CheckResult")
                 @Override
                 public void run() {
+                    try {
+                        listRelated = new ArrayList<>();
+                        Single single = s.getSingle();
+                        listRelated = s.getRelated();
 
-                    listRelated = new ArrayList<>();
-                    Single single = s.getSingle();
-                    listRelated = s.getRelated();
+                        title_news = single.getTitle();
+                        image_news = single.getFeaturedImg();
+                        date_news = dateFormatter.format(single.getDatePublished());
+                        final int[] w = { 0 };
+                        final int[] h = { 0 };
+                        Glide.with(getApplicationContext())
+                                .asBitmap()
+                                .load(single.getFeaturedImg())
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        w[0] = resource.getWidth();
+                                        h[0] = resource.getHeight();
+                                    }
+                                });
+                        final RequestOptions options = new RequestOptions();
+                        w[0] = w[0]==0?1:w[0];
+                        int rasio = (Integer.valueOf(getWidthHeight().get("width")) / w[0]);
+                        Log.d(TAG, "run: "+rasio);
+                        Log.d(TAG, "run: "+w[0]);
+                        Log.d(TAG, "run: "+getWidthHeight().get("width"));
+                        w[0] = rasio * w[0];
+                        h[0] = rasio * h[0];
+                        options.override(w[0], h[0]);
+                        Glide.with(getApplicationContext())
+                                .load(single.getFeaturedImg())
+                                .apply(options)
+                                .into(img_banner);
+                        tvTitle.setText(single.getTitle());
+                        titleToolbar.setText(single.getTitle());
 
-                    title_news = single.getTitle();
-                    image_news = single.getFeaturedImg();
-                    date_news = dateFormatter.format(single.getDatePublished());
-                    final int[] w = { 0 };
-                    final int[] h = { 0 };
-                    Glide.with(getApplicationContext())
-                            .asBitmap()
-                            .load(single.getFeaturedImg())
-//                            .apply(options)
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                    w[0] = resource.getWidth();
-                                    h[0] = resource.getHeight();
-                                }
-                            });
-                    final RequestOptions options = new RequestOptions();
-                    w[0] = w[0]==0?1:w[0];
-                    int rasio = (Integer.valueOf(getWidthHeight().get("width")) / w[0]);
-                    Log.d(TAG, "run: "+rasio);
-                    Log.d(TAG, "run: "+w[0]);
-                    Log.d(TAG, "run: "+getWidthHeight().get("width"));
-                    w[0] = rasio * w[0];
-                    h[0] = rasio * h[0];
-                    options.override(w[0], h[0]);
-                    Glide.with(getApplicationContext())
-                            .load(single.getFeaturedImg())
-                            .apply(options)
-                            .into(img_banner);
-                    tvTitle.setText(single.getTitle());
-                    titleToolbar.setText(single.getTitle());
-//                    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
-//                    DateTime dt = formatter.parseDateTime(string);
-//
-//                    Date date1 = (Date) single.getCreatedAt();
-//                    Date date2 = new Date();
-//                    long difference = date2.getTime() - date1.getTime();
+                        tvDate.setText(single.getKategori() +"-"+ dateFormatter.format(single.getCreatedAt()));
+                        tvContent.setWebViewClient(new WebViewClient(){
+                            @Override
+                            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                                return false;
+                            }
+                        });
+                        tvContent.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View view) {
+                                return true;
+                            }
+                        });
+                        tvContent.setLongClickable(false);
+                        tvContent.setHapticFeedbackEnabled(false);
+                        WebSettings cs = tvContent.getSettings();
+                        cs.setJavaScriptEnabled(true);
+                        cs.setUseWideViewPort(false);
+                        cs.setLoadWithOverviewMode(true);
+                        String contents;
+                        contents = "<style>" +
+                                "img{display: inline!important; height: auto!important; max-width: 100%!important; margin: 2px!important}" +
+                                "p{margin-top:3px; margin-bottom:3px}" +
+                                "iframe{top:0;left:0;width:100%;}" +
+                                "</style>";
+                        contents += single.getPost()
+                                .replace("<img", "<img class='img-responsive'")
+                                .replace("//cdn", "https://cdn")
+                                .replace("//www", "https://www");
 
-                    tvDate.setText(single.getKategori() +"-"+ dateFormatter.format(single.getCreatedAt()));
-                    tvContent.setWebViewClient(new WebViewClient(){
-                        @Override
-                        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                            return false;
-                        }
-                    });
-                    tvContent.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View view) {
-                            return true;
-                        }
-                    });
-                    tvContent.setLongClickable(false);
-                    tvContent.setHapticFeedbackEnabled(false);
-                    WebSettings cs = tvContent.getSettings();
-                    cs.setJavaScriptEnabled(true);
-                    cs.setUseWideViewPort(false);
-                    cs.setLoadWithOverviewMode(true);
-                    String contents;
-                    contents = "<style>" +
-                            "img{display: inline!important; height: auto!important; max-width: 100%!important; margin: 2px!important}" +
-                            "p{margin-top:3px; margin-bottom:3px}" +
-                            "iframe{top:0;left:0;width:100%;}" +
-                            "</style>";
-                    contents += single.getPost()
-                            .replace("<img", "<img class='img-responsive'")
-                            .replace("//cdn", "https://cdn")
-                            .replace("//www", "https://www");
+                        tvContent.loadData(contents, "text/html", "UTF-8");
 
-                    tvContent.loadData(contents, "text/html", "UTF-8");
+                        skeletonScreen.hide();
 
-                    skeletonScreen.hide();
-
-                    Call<ResponseGetComment> callComment = mnewsServices.getComment(slug_id, "1");
-                    new GetCountComment().execute(callComment);
+                        Call<ResponseGetComment> callComment = mnewsServices.getComment(slug_id, "1");
+                        new GetCountComment().execute(callComment);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             });
         }

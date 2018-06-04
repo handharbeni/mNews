@@ -36,12 +36,13 @@
                     android:scaleType="fitCenter"
                     android:layout_marginLeft="@dimen/sepuluh_dp"
                     android:id="@+id/back"
-                    app:srcCompat="@drawable/ic_arrow_back"
-                    android:layout_width="20dp"
+                    app:srcCompat="@drawable/new_ic_back"
+                    android:layout_width="40dp"
                     android:layout_height="13dp" />
                 <TextView
                     android:textSize="16sp"
-                    android:layout_marginLeft="@dimen/sepuluh_dp"
+                    android:layout_marginLeft="@dimen/limabelas_dp"
+                    android:layout_marginRight="@dimen/lima_dp"
                     android:id="@+id/titleToolbar"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"

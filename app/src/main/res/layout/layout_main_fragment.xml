@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.v4.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@color/colorBackground">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ViewStub
-            android:id="@+id/featured"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout="@layout/layout_item_featured" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvItemNews"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:id="@+id/loader"
-            android:layout_gravity="center"
-            android:src="@drawable/new_ic_loader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:orientation="vertical">
 
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+            <ViewStub
+                android:id="@+id/featured"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/layout_item_featured" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvItemNews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <com.mdirect.mnews.utils.LoadingSpinner
+                android:layout_gravity="center"
+                android:id="@+id/loader"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -24,7 +24,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_search" />
+            app:srcCompat="@drawable/new_ic_search" />
 
         <EditText
             android:singleLine="true"

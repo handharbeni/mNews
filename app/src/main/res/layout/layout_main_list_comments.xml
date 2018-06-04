@@ -39,7 +39,7 @@
                     android:id="@+id/back"
                     app:srcCompat="@drawable/ic_arrow_back"
                     android:layout_width="20dp"
-                    android:layout_height="13dp" />
+                    android:layout_height="match_parent" />
                 <TextView
                     android:textSize="16sp"
                     android:layout_marginLeft="@dimen/sepuluh_dp"
@@ -112,7 +112,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/sepuluh_dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_send" />
+                app:srcCompat="@drawable/new_ic_send" />
         </RelativeLayout>
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

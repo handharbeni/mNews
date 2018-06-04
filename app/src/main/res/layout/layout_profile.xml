@@ -37,7 +37,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:padding="@dimen/lima_dp"
-                    app:srcCompat="@drawable/ic_edit_pencil" />
+                    app:srcCompat="@drawable/new_ic_pencil" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -47,9 +47,9 @@
                         android:scaleType="fitCenter"
                         android:layout_marginLeft="@dimen/sepuluh_dp"
                         android:id="@+id/back"
-                        app:srcCompat="@drawable/ic_arrow_back"
+                        app:srcCompat="@drawable/new_ic_back"
                         android:layout_width="20dp"
-                        android:layout_height="13dp" />
+                        android:layout_height="match_parent" />
                     <TextView
                         android:textSize="16sp"
                         android:layout_marginLeft="@dimen/sepuluh_dp"

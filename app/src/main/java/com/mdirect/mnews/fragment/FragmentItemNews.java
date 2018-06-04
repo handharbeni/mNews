@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,6 +46,7 @@ import illiyin.mhandharbeni.databasemodule.services.MnewsServices;
 import illiyin.mhandharbeni.realmlibrary.Crud;
 import illiyin.mhandharbeni.realmlibrary.RealmListener;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,6 +87,9 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
 
     @BindView(R.id.loader)
     ImageView loader;
+
+    @BindView(R.id.swipeLayout)
+    SwipeRefreshLayout swipeLayout;
 
     private int PAGE_SIZE = 3;
 
@@ -130,9 +135,30 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
         ButterKnife.bind(this, v);
         initModule();
         initData();
-        startLoader();
+//        startLoader();
+
+        syncNow(String.valueOf(1), true);
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                syncNow(String.valueOf(1), true);
+            }
+        });
+
+
+        listenerRealmUpdate();
         Log.d(TAG, "onCreateView: "+getIds());
         return v;
+    }
+
+    private void listenerRealmUpdate(){
+        crudNews.getRealm().addChangeListener(new RealmChangeListener<Realm>() {
+            @Override
+            public void onChange(Realm realm) {
+                updateData();
+            }
+        });
     }
 
     private void initModule(){
@@ -154,45 +180,96 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
             cFeatured = new Featured(getActivity().getApplicationContext(), featured.inflate(), this);
         }
     }
+    private void updateData(){
+        try {
+            int i = 0;
+            RealmResults results = null;
+            results = crudNews.read();
+            showLog(TAG, "JUMLAH DATA "+results.size());
+            if (getIds() != null){
+                if (getIds().equalsIgnoreCase("Semua Kanal")){
+                    i = 2;
+                    getFeaturedPost();
+//                featured.setVisibility(View.VISIBLE);
+                    results = crudNews.read();
 
+                    if (results.size() < 1){
+                        featured.setVisibility(View.GONE);
+                    }else{
+                        featured.setVisibility(View.VISIBLE);
+                    }
+                    showLog(TAG, String.valueOf("Jumlah Data Kategori "+getIds()+" ADALAH "+results.size()));
+                }else{
+                    i = 0;
+                    featured.setVisibility(View.GONE);
+                    results = crudNews.read("kategoriName", getIds());
+                    showLog(TAG, String.valueOf("Jumlah Data Kategori "+getIds()+" ADALAH "+results.size()));
+                }
+            }
+            listNews = new ArrayList<>();
+            if (results.size() > 0){
+                try {
+                    do {
+                        DataGetAllPost dGetAllPost = (DataGetAllPost) results.get(i);
+                        listNews.add(dGetAllPost);
+                        i++;
+                    }while (i<results.size());
+                }catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+            }
+            adapterItemNews.updateData(listNews);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     private void initData(){
-        int i = 0;
-        RealmResults results = null;
-        results = crudNews.read();
-        showLog(TAG, "JUMLAH DATA "+results.size());
-        if (getIds() != null){
-            if (getIds().equalsIgnoreCase("Semua Kanal")){
-                i = 2;
-                getFeaturedPost();
-                featured.setVisibility(View.VISIBLE);
-                results = crudNews.read();
-                showLog(TAG, String.valueOf("Jumlah Data Kategori "+getIds()+" ADALAH "+results.size()));
-            }else{
-                i = 0;
-                featured.setVisibility(View.GONE);
-                results = crudNews.read("kategoriName", getIds());
-                showLog(TAG, String.valueOf("Jumlah Data Kategori "+getIds()+" ADALAH "+results.size()));
+        try {
+            int i = 0;
+            RealmResults results = null;
+            results = crudNews.read();
+            showLog(TAG, "JUMLAH DATA "+results.size());
+            if (getIds() != null){
+                if (getIds().equalsIgnoreCase("Semua Kanal")){
+                    i = 2;
+                    getFeaturedPost();
+                    results = crudNews.read();
+                    if (results.size() < 1){
+                        featured.setVisibility(View.GONE);
+                    }else{
+                        featured.setVisibility(View.VISIBLE);
+                    }
+                    showLog(TAG, String.valueOf("Jumlah Data Kategori "+getIds()+" ADALAH "+results.size()));
+                }else{
+                    i = 0;
+                    featured.setVisibility(View.GONE);
+                    results = crudNews.read("kategoriName", getIds());
+                    showLog(TAG, String.valueOf("Jumlah Data Kategori "+getIds()+" ADALAH "+results.size()));
+                }
             }
-        }
-        listNews = new ArrayList<>();
-        if (results.size() > 0){
-            try {
-                do {
-                    DataGetAllPost dGetAllPost = (DataGetAllPost) results.get(i);
-                    listNews.add(dGetAllPost);
-                    i++;
-                }while (i<results.size());
-            }catch (ArrayIndexOutOfBoundsException e){
-                e.printStackTrace();
+            listNews = new ArrayList<>();
+            if (results.size() > 0){
+                try {
+                    do {
+                        DataGetAllPost dGetAllPost = (DataGetAllPost) results.get(i);
+                        listNews.add(dGetAllPost);
+                        i++;
+                    }while (i<results.size());
+                }catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
             }
+
+            adapterItemNews = new AdapterItemNews(getActivity().getApplicationContext(), listNews, this);
+            llm = new LinearLayoutManager(getActivity());
+            rvItemNews.setLayoutManager(llm);
+            rvItemNews.setItemAnimator(new DefaultItemAnimator());
+            rvItemNews.setAdapter(adapterItemNews);
+            rvItemNews.addOnScrollListener(recyclerViewOnScrollListener);
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        adapterItemNews = new AdapterItemNews(getActivity().getApplicationContext(), listNews, this);
-        llm = new LinearLayoutManager(getActivity());
-        rvItemNews.setLayoutManager(llm);
-        rvItemNews.setItemAnimator(new DefaultItemAnimator());
-        rvItemNews.setAdapter(adapterItemNews);
-        rvItemNews.addOnScrollListener(recyclerViewOnScrollListener);
     }
 
     public String getIds(){
@@ -220,18 +297,13 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
                         && firstVisibleItemPosition >= 0
                         /*&& totalItemCount >= PAGE_SIZE*/) {
                     isLoading = true;
+                    loader.setVisibility(View.VISIBLE);
                     Log.d(TAG, "onScrolled: Bottom Has Reach");
                     syncNow(String.valueOf(currentPage+(totalItemCount/PAGE_SIZE)));
                 }
             }
         }
     };
-    private void startLoader(){
-        RotateAnimation rotate = new RotateAnimation(0, 360000, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(5000000);
-        rotate.setInterpolator(new LinearInterpolator());
-        loader.startAnimation(rotate);
-    }
     private void syncNow(final String page){
         Log.d(TAG, "syncNow: Page :"+page);
         getActivity().runOnUiThread(new Runnable() {
@@ -241,7 +313,17 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
             }
         });
     }
-
+    private void syncNow(final String page, final Boolean swipe){
+        Log.d(TAG, "syncNow: Page :"+page);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mnewsServices.getAllPost(page).enqueue(findNewsCallback);
+                swipeLayout.setRefreshing(false);
+                loader.setVisibility(View.GONE);
+            }
+        });
+    }
     private Callback<ResponseGetAllPost> findNewsCallback = new Callback<ResponseGetAllPost>() {
         @Override
         public void onResponse(Call<ResponseGetAllPost> call, Response<ResponseGetAllPost> response) {
@@ -251,30 +333,32 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
                 int responseCode = response.code();
                 if(responseCode == 504) { // 504 Unsatisfiable Request (only-if-cached)
                 }
+                loader.setVisibility(View.GONE);
                 return;
             }
             ResponseGetAllPost responseGetAllPost = response.body();
             if (response != null){
                 assert responseGetAllPost != null;
-                List<DataGetAllPost> newData = responseGetAllPost.getData();
+                final List<DataGetAllPost> newData = responseGetAllPost.getData();
                 if (newData.size() > 0){
-                    for (final DataGetAllPost dGetAllPost:newData){
-                        if (crudNews != null){
-
-                            RealmResults results = crudNews.read("slugId",dGetAllPost.getSlugId());
-                            if (results.size() > 0){
-                                /*update*/
-                                updateRealm(dGetAllPost);
-                            }else{
-                                /*create*/
-                                if (getIds().equalsIgnoreCase(dGetAllPost.getKategoriName())){
-                                    adapterItemNews.updateData(dGetAllPost);
-                                }
-                                createRealm(dGetAllPost);
+                    try {
+                        crudNews.getRealm().executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realm.copyToRealmOrUpdate(newData);
                             }
-                        }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                /*update adapter*/
+                                updateData();
+                                loader.setVisibility(View.GONE);
+                            }
+                        });
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
+//                    loader.setVisibility(View.GONE);
                 }
             }
         }
@@ -283,85 +367,11 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
         public void onFailure(Call<ResponseGetAllPost> call, Throwable t) {
             if (!call.isCanceled()){
                 isLoading = false;
+                loader.setVisibility(View.GONE);
             }
         }
     };
 
-    public void createRealm(final DataGetAllPost dataGetAllPost){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    DataGetAllPost post = new DataGetAllPost();
-                    Crud crudNewx = new Crud(getContext(), post);
-                    RealmResults checkDuplicate = crudNewx.read("slugId", dataGetAllPost.getSlugId());
-                    if (checkDuplicate.size() < 1){
-                        crudNewx.create(dataGetAllPost);
-                        crudNewx.closeRealm();
-                    }
-                }catch (IllegalStateException e){
-
-                }
-            }
-        }).start();
-    }
-
-    public void updateRealm(final DataGetAllPost dataGetAllPost){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DataGetAllPost post = new DataGetAllPost();
-                final Crud crudNewx = new Crud(getContext(), post);
-
-
-                RealmResults results = crudNewx.read("slugId",dataGetAllPost.getSlugId());
-                if (results.size() > 0){
-                    final DataGetAllPost oldPost = (DataGetAllPost) results.get(0);
-                    assert oldPost != null;
-                    if (oldPost.getUpdatedAt() != null){
-                        if (!oldPost.getUpdatedAt().equalsIgnoreCase(dataGetAllPost.getUpdatedAt())){
-                            /*update*/
-                            try {
-
-                                crudNewx.getRealm().executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        if (!crudNewx.getRealm().isInTransaction()){
-                                            crudNewx.openObject();
-                                        }
-                                        crudNewx.getRealmObject("slugId", oldPost.getSlugId());
-                                        crudNewx.update(dataGetAllPost);
-                                        crudNewx.commitObject();
-//                                        realm.beginTransaction();
-//                                        realm
-                                    }
-                                });
-                            }catch (IllegalStateException e){
-
-                            }
-                        }
-                    }else{
-                        try {
-                            crudNewx.getRealm().executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    if (!crudNewx.getRealm().isInTransaction()){
-                                        crudNewx.openObject();
-                                    }
-                                    crudNewx.getRealmObject("slugId", oldPost.getSlugId());
-                                    crudNewx.update(dataGetAllPost);
-                                    crudNewx.commitObject();
-                                }
-                            });
-                        }catch (IllegalStateException e){
-                        }
-                    }
-                }
-
-                crudNewx.closeRealm();
-            }
-        }).start();
-    }
 
     @Override
     public void onUpdate() {

@@ -8,12 +8,14 @@ import java.util.List;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Beni on 12/03/2018.
  */
 
 public class DataMenus extends RealmObject {
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
