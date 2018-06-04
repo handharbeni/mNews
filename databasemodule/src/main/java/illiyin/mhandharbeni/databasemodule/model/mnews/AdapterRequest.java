@@ -69,46 +69,24 @@ public class AdapterRequest {
                         if (responseGetMenus.getSuccess()){
                             DataMenus dataMenus = new DataMenus();
                             Crud crudRealmMenus = new Crud(context, dataMenus);
-                            List<DataMenus> data = responseGetMenus.getData();
+                            final List<DataMenus> data = responseGetMenus.getData();
                             if (data.size() > 0){
                                 int j = 0;
-                                for (final DataMenus dMenus:data){
-                                    Boolean duplicate = crudRealmMenus.checkDuplicate("id", dMenus.getId());
-                                    if (duplicate){
-                                        /*update*/
-                                        crudRealmMenus.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                realm.beginTransaction();
-                                                realm.copyToRealmOrUpdate(dMenus);
-                                                realm.commitTransaction();
-                                            }
-                                        }, new Realm.Transaction.OnError() {
-                                            @Override
-                                            public void onError(Throwable error) {
-                                                Log.d(TAG, "onError: "+error);
-                                            }
-                                        });
-                                    }else{
-                                        crudRealmMenus.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                realm.beginTransaction();
-                                                realm.copyToRealm(dMenus);
-                                                realm.commitTransaction();
-                                            }
-                                        }, new Realm.Transaction.OnError() {
-                                            @Override
-                                            public void onError(Throwable error) {
-                                                Log.d(TAG, "onError: "+error);
-                                            }
-                                        });
-                                        /*create*/
+                                crudRealmMenus.getRealm().executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+//                                                realm.beginTransaction();
+                                        realm.copyToRealmOrUpdate(data);
+//                                                realm.commitTransaction();
                                     }
-                                    syncChildMenus(dMenus.getId(), dMenus.getChildren());
-                                    j++;
-                                }
+                                }, new Realm.Transaction.OnError() {
+                                    @Override
+                                    public void onError(Throwable error) {
+                                        Log.d(TAG, "onError: "+error);
+                                    }
+                                });
                             }
+//                            syncChildMenus(dMenus.getId(), dMenus.getChildren());
                             crudRealmMenus.closeRealm();
                         }
                     }
@@ -135,46 +113,15 @@ public class AdapterRequest {
                     public void onNext(ResponseGetMenus responseGetMenus) {
                         DataMenus dataMenus = new DataMenus();
                         Crud crudRealmMenus = new Crud(context, dataMenus);
-                        List<DataMenus> data = responseGetMenus.getData();
                         if (responseGetMenus.getSuccess()){
+                            final List<DataMenus> data = responseGetMenus.getData();
                             if (data.size() > 0){
-                                int j = 0;
-                                for (final DataMenus dMenus:data){
-                                    Boolean duplicate = crudRealmMenus.checkDuplicate("id", dMenus.getId());
-                                    if (duplicate){
-                                        /*update*/
-                                        crudRealmMenus.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                realm.beginTransaction();
-                                                realm.copyToRealmOrUpdate(dMenus);
-                                                realm.commitTransaction();
-                                            }
-                                        }, new Realm.Transaction.OnError() {
-                                            @Override
-                                            public void onError(Throwable error) {
-                                                Log.d(TAG, "onError: "+error);
-                                            }
-                                        });
-                                    }else{
-                                        crudRealmMenus.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                realm.beginTransaction();
-                                                realm.copyToRealm(dMenus);
-                                                realm.commitTransaction();
-                                            }
-                                        }, new Realm.Transaction.OnError() {
-                                            @Override
-                                            public void onError(Throwable error) {
-                                                Log.d(TAG, "onError: "+error);
-                                            }
-                                        });
-                                        /*create*/
+                                crudRealmMenus.getRealm().executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        realm.copyToRealmOrUpdate(data);
                                     }
-                                    syncChildMenus(dMenus.getId(), dMenus.getChildren());
-                                    j++;
-                                }
+                                });
                             }
                             crudRealmMenus.closeRealm();
                         }
@@ -183,44 +130,21 @@ public class AdapterRequest {
                 });
         return true;
     }
-    private void syncChildMenus(int idMenus, RealmList<Child> children){
+    private void syncChildMenus(int idMenus, final RealmList<Child> children){
         Child child = new Child();
         Crud crudChild = new Crud(context, child);
-        for (final Child dChild: children) {
-            dChild.setIdMenus(idMenus);
-            Boolean duplicateChild = crudChild.checkDuplicate("id", child.getId());
-            if (duplicateChild) {
-                crudChild.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.beginTransaction();
-                        realm.copyToRealmOrUpdate(dChild);
-                        realm.commitTransaction();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        Log.d(TAG, "onError: "+error);
-                    }
-                });
-                /*update*/
-            } else {
-                /*create*/
-                crudChild.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.beginTransaction();
-                        realm.copyToRealm(dChild);
-                        realm.commitTransaction();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        Log.d(TAG, "onError: "+error);
-                    }
-                });
+
+        crudChild.getRealm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(children);
             }
-        }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Log.d(TAG, "onError: "+error);
+            }
+        });
         crudChild.closeRealm();
     }
     public void syncFeatureds(){
@@ -249,12 +173,12 @@ public class AdapterRequest {
                                 crudFeaturedPost.getRealm().executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        realm.beginTransaction();
-                                        realm.deleteAll();
-                                        realm.commitTransaction();
-                                        realm.beginTransaction();
+//                                        realm.beginTransaction();
+//                                        realm.deleteAll();
+//                                        realm.commitTransaction();
+//                                        realm.beginTransaction();
                                         realm.copyToRealmOrUpdate(data);
-                                        realm.commitTransaction();
+//                                        realm.commitTransaction();
                                         syncProperties(data.getId(), data.getProperties());
 
                                     }
@@ -299,10 +223,10 @@ public class AdapterRequest {
                                 crudFeaturedPost.getRealm().executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        realm.deleteAll();
-                                        realm.beginTransaction();
+//                                        realm.deleteAll();
+//                                        realm.beginTransaction();
                                         realm.copyToRealmOrUpdate(data);
-                                        realm.commitTransaction();
+//                                        realm.commitTransaction();
                                         syncProperties(data.getId(), data.getProperties());
                                     }
                                 }, new Realm.Transaction.OnSuccess() {
@@ -350,9 +274,9 @@ public class AdapterRequest {
                 crudProperties.getRealm().executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.beginTransaction();
+//                        realm.beginTransaction();
                         realm.copyToRealmOrUpdate(properties);
-                        realm.commitTransaction();
+//                        realm.commitTransaction();
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
@@ -380,9 +304,9 @@ public class AdapterRequest {
                     crudAuthor.getRealm().executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            realm.beginTransaction();
+//                            realm.beginTransaction();
                             realm.copyToRealmOrUpdate(dAuthor);
-                            realm.commitTransaction();
+//                            realm.commitTransaction();
                         }
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
@@ -411,51 +335,20 @@ public class AdapterRequest {
             @Override
             public void onResponse(Call<ResponseGetAllPost> call, Response<ResponseGetAllPost> response) {
                 if (response.body().getSuccess()){
-                    DataGetAllPost dataGetAllPost = new DataGetAllPost();
+                    final DataGetAllPost dataGetAllPost = new DataGetAllPost();
                     final Crud crudGetAllPost = new Crud(context, dataGetAllPost);
-                    List<DataGetAllPost> dataResponse = response.body().getData();
-                        if (dataResponse.size() > 0){
-                            for (final DataGetAllPost dGetAllPost:dataResponse){
-                                Log.d(TAG, "onNext: Id :"+dGetAllPost.getId());
-                                RealmResults duplicate = crudGetAllPost.read("slugId", dGetAllPost.getSlugId());
-                                if (duplicate.size() > 0){
-                                    /*update data*/
-                                    RealmResults resultsDuplicate = crudGetAllPost.read("slugId", dGetAllPost.getSlugId());
-                                    DataGetAllPost resultData = (DataGetAllPost) resultsDuplicate.get(0);
-                                    if (dGetAllPost.getUpdatedAt() != null){
-                                        if (!resultData.getUpdatedAt().equalsIgnoreCase(dGetAllPost.getUpdatedAt())){
-                                            crudGetAllPost.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                                                @Override
-                                                public void execute(Realm realm) {
-                                                    /*update*/
-                                                    realm.beginTransaction();
-                                                    realm.copyToRealmOrUpdate(dGetAllPost);
-                                                    realm.commitTransaction();
-
-                                                }
-                                            });
-                                        }
-                                    }
-
-//                                        syncProperties(dGetAllPost.getId(), dGetAllPost.getProperties());
-                                }else{
-                                    /*create data*/
-                                    crudGetAllPost.getRealm().executeTransactionAsync(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
-                                            realm.beginTransaction();
-                                            realm.copyToRealmOrUpdate(dGetAllPost);
-                                            realm.commitTransaction();
-                                        }
-                                    }, new Realm.Transaction.OnSuccess() {
-                                        @Override
-                                        public void onSuccess() {
-
-                                        }
-                                    });
-                                }
-                            }
+                    final List<DataGetAllPost> dataResponse = response.body().getData();
+                    crudGetAllPost.getRealm().executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realm.copyToRealmOrUpdate(dataResponse);
                         }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+                    });
                     crudGetAllPost.closeRealm();
                 }
             }

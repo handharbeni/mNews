@@ -41,7 +41,7 @@
                 <ImageView
                     android:id="@+id/imgMenu"
                     android:padding="@dimen/lima_dp"
-                    app:srcCompat="@drawable/ic_humberger"
+                    app:srcCompat="@drawable/new_ic_hamberger"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <LinearLayout

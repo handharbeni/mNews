@@ -73,6 +73,16 @@ public class SplashScreen extends BaseApps{
     public void initData(){
         Log.d(TAG, "syncMenus: Init Data");
         idLoading.setText("Loading Data Menu");
+//        initFeatured();
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                boolean callBack = adapterRequest.syncMenus(true);
+//                if (callBack){
+//                    initFeatured();
+//                }
+//            }
+//        });
         crud.getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

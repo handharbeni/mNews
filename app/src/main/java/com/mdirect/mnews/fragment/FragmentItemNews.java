@@ -13,6 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +83,9 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
     @BindView(R.id.rvItemNews)
     RecyclerView rvItemNews;
 
+    @BindView(R.id.loader)
+    ImageView loader;
+
     private int PAGE_SIZE = 3;
 
     private boolean isLastPage = false;
@@ -124,6 +130,7 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
         ButterKnife.bind(this, v);
         initModule();
         initData();
+        startLoader();
         Log.d(TAG, "onCreateView: "+getIds());
         return v;
     }
@@ -169,11 +176,15 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
         }
         listNews = new ArrayList<>();
         if (results.size() > 0){
-            do {
-                DataGetAllPost dGetAllPost = (DataGetAllPost) results.get(i);
-                listNews.add(dGetAllPost);
-                i++;
-            }while (i<results.size());
+            try {
+                do {
+                    DataGetAllPost dGetAllPost = (DataGetAllPost) results.get(i);
+                    listNews.add(dGetAllPost);
+                    i++;
+                }while (i<results.size());
+            }catch (ArrayIndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
         }
 
         adapterItemNews = new AdapterItemNews(getActivity().getApplicationContext(), listNews, this);
@@ -215,7 +226,12 @@ public class FragmentItemNews extends BaseFragments implements RealmListener, Cl
             }
         }
     };
-
+    private void startLoader(){
+        RotateAnimation rotate = new RotateAnimation(0, 360000, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(5000000);
+        rotate.setInterpolator(new LinearInterpolator());
+        loader.startAnimation(rotate);
+    }
     private void syncNow(final String page){
         Log.d(TAG, "syncNow: Page :"+page);
         getActivity().runOnUiThread(new Runnable() {
